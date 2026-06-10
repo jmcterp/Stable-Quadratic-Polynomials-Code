@@ -1,0 +1,952 @@
+f[x_,c_]:= x^2+1/c;
+fcn[c_, n_] := (ff[x_]:=x^2+1/c; Return[Nest[ff, x, n]]) 
+fbar[x_, c_, z_]:=If[GCD[c,z]==1, x^2+ModularInverse[c,z],Return[0]];
+fbarcn[c_, z_, n_] := (If[GCD[c,z]==1, fff[x_] := x^2 + ModularInverse[c, z],Return[0]];
+  fbarlist = List[fbar[x, c, z]];
+  For[i = 1, i <= n, i++;
+   AppendTo[fbarlist, Polymod[fbar[fbarlist[[i-1]], c, z], z]]];
+   Return[fbarlist[[n]]])
+fblist[c_,z_,n_]:= fbarcn[c,z,#] & /@ Range[n]
+Polymod[poly_, z_]:= (Clear[x]; coeffs:=Mod[CoefficientList[Expand[poly], x],z]; Return[Expand[FromDigits[Reverse[coeffs], x]]])
+listf[c_,n_]=Table[fcn[c,i],{i,n}];
+listg[i_, m_,n_]=Table[g[i, m, j], {j,n}];
+listf0[c_,n_]:=Table[fcn[c,i],{i,n}]/.x->0
+listg0[i_,m_,n_]:=Table[g[i, m, j], {j,n}] /.x->0
+listh0[i_,m_,n_]:=Table[h[i,m,j], {j,n}]/.x->0
+listv0[i_,n_]: =Table[v[i,j], {j,n}]/.x->0
+
+pr=gp[100];
+NN=Length[pr];
+h2f0datasetprimes:={};
+h1datasetprimes:=Import["C:\Users\jerma\Downloads\h1data.csv", "List"];
+maxh2f0:=Max[Table[h2f0datasetprimes[[i]][[3]], {i,Length[h2data]}]]
+hif0dataset[i_]:={If[i==1, h1dataset]; If[i==2, h2dataset]}
+hif0primes[i_, s_] := (Clear[counter]; counter = 1;
+  Until[Union[
+ 	modpsqrts[Findcycle[hmodz[i, s, 100, pr[[counter]]]],
+  	pr[[counter]]]] == {Null} || counter==NN,  counter += 1]; If[counter==NN, Print[1]; Print[s]];
+  hmodzlist =Findcycle[hmodz[i, s, 100, pr[[counter]]]];
+postable=Table[{ii}, {ii, Range[k1-1]}]; 
+If[(i==1 && MemberQ[{3,5,56},s]) || (i==2 && MemberQ[{-3,-5,-56},s]) , AppendTo[hif0dataset[i], {s, pr[[counter]], k1,
+   hmodzlist}]; k1=1];
+If[k1>1, counter2=1; k1primes=Table[0, {Range[k1-1]}];
+Until[MemberQ[k1primes,0]==False || counter2==NN, prime2=pr[[counter2]]; k1primes1=k1primes; sqrtspos=Position[modpsqrts[hmodz[i,s,k1-1,prime2],prime2], Null]; k1primes=ReplacePart[k1primes1, prime2, sqrtspos]; counter2+=1]; If[counter2==NN, Print[2]; Print[s]];
+AppendTo[hif0dataset[i], {s, pr[[counter]], k1,
+   hmodzlist, k1primes}], AppendTo[hif0dataset[i], {s, pr[[counter]], k1,
+   hmodzlist}]]; hif0datasetprimes1=hif0dataset[i]; hif0dataset[i]=Union[hif0datasetprimes1])
+
+
+runhif0primes[i_]:=For[e=4,e<=177, e++, hif0cbx[i,e,e+1]; Print[e]]
+hif0cbx[i_,m_,n_]:= hif0primes[i,#] & /@ cboxx[m,n]
+
+
+g1dataset={};
+g2dataset={};
+gif0dataset[i_]:=If[i==1, g1dataset, If[i==2, g2dataset]];
+gif0primes[i_, m_] := (Clear[counter]; counter = 1;
+  Until[(Union[
+ 	modpsqrts[Findcycle[wnmodz[i, m, 100, pr[[counter]]]],
+  	pr[[counter]]]] == {Null}) || counter==NN-1,  counter += 1]; If[counter==NN-1, Print[1]; Print[m]; Return[{1,m}] ];
+  gmodzlist =Findcycle[wnmodz[i, m, 100, pr[[counter]]]];
+postable=Table[{ii}, {ii, Range[k1-1]}]; 
+If[k1>1, counter2=1; k1primes=Table[0, {Range[k1-1]}];
+Until[(MemberQ[k1primes,0]==False) || counter2==NN-1, prime2=pr[[counter2]]; k1primes1=k1primes; sqrtspos=Position[modpsqrts[wnmodz[i,m,k1-1,prime2],prime2], Null]; k1primes=ReplacePart[k1primes1, prime2, sqrtspos]; counter2+=1]; If[counter2==NN-1, Print[2]; Print[m]];
+AppendTo[gif0dataset[i], {m, pr[[counter]], k1,
+   gmodzlist, k1primes}], AppendTo[gif0dataset[i], {m, pr[[counter]], k1,
+   gmodzlist}]]; gif0datasetprimes1=gif0dataset[i]; gif0dataset[i]=Union[gif0datasetprimes1])
+
+
+fprimes[c_]:=(Clear[counter]; counter = 1;
+  Until[Union[
+ 	modpsqrts[Findcycle[anmodz[c, 20, pr[[counter]]]],
+  	pr[[counter]]]] == {Null}, counter += 1];
+  hmodzlist :=Findcycle[hmodz[c, 20, pr[[counter]]]]; 
+postable:=Table[{ii}, {ii, Range[k1-1]}]; counter2=1; k1primes={}; 
+Until[postable == {}, postable1=postable; postable2=Position[ modpsqrts[ anmodz[c,k1-1, pr[[counter2]] ] ], Null ];  postable:=Complement[postable1,postable2]; If[postable!=postable1, AppendTo[k1primes, {pr[[counter2]], postable2}]]; counter2 += 1];
+  fmodzlist :=Findcycle[fmodz[c, 20, pr[[counter]]]];
+{s, pr[[counter]], k1,
+   fmodzlist, k1primes})
+
+
+disch12[y_,n_]:= Discriminant[h12[fsn[x,s,n],s],x]/.{s->y}
+disch11[y_,n_]:= Discriminant[h11[fs[x,s,n],s],x]/.{s->y}
+disch2[y_,n_]:= Discriminant[h2[fs[x,s,n],s],x]/.{s->y}
+disch1[y_,n_]:= Discriminant[h12[fs[x,s,n],s],x]/.{s->y}
+
+
+v[i_,n_]:= (If[i==1, Return[v1[fcn[4,n]]]]; If[i==2, Return[v2[fcn[4,n]]]]);
+v1[x_]:= x^2-(1/2)x+19/48
+v1modz[y_,z_]:=If[GCD[48,z]==1, Polymod[x^2-ModularInverse[2,z]*x+19*ModularInverse[48,z],z]/.{x->y},0]
+v2[x_]:=x^2+(1/2)x+19/48
+v2modz[y_,z_]:=If[GCD[48,z]==1,Polymod[x^2+ModularInverse[2,z]*x+19*ModularInverse[48,z],z]/.{x->y},0]
+q1[x_,m_]:= x^2-x (1-I)/m -(I*m^2-1)/(m^2(m^2+2*I))
+q2[x_,m_]:= x^2+x (1-I)/m -(I*m^2-1)/(m^2(m^2+2*I))
+q1modz[y_,m_,z_]:=If[GCD[m^2+2*I,z]==1==GCD[m,z], Polymod[x^2-(1-I)*ModularInverse[m,z]*x-(I*m^2-1)*ModularInverse[m^2(m^2+2*I),z],z]/.{x->y},0]
+q2modz[y_,m_,z_]:=If[GCD[m^2+2*I,z]==1==GCD[m,z], Polymod[x^2+(1-I)*ModularInverse[m,z]*x-(I*m^2-1)*ModularInverse[m^2(m^2+2*I),z],z]/.{x->y},0]
+
+
+mbound[c_]:= 1+Floor[Log2[1+(Log[4]+4(1+Sqrt[2])/Sqrt[c])/Log[Sqrt[1+1/Abs[c]]]]]
+anrec1[c_, n_] := (Clear[k]; Nu= Numerator[1/c]; De=Denominator[1/c]; cbar=Conjugate[c]/GCD[Re[c],Im[c]]; AN:=List[Nu]; If[Conjugate[c]!= c, If[Re[c]==0, For[k=1, k<=n, k++, AppendTo[AN, (AN[[k]])^2-I*Im[c]^(2^k-1)]], For[k = 1, k <= n, k++, AppendTo[AN, (AN[[k]])^2 + De^(2^k-1)*cbar]]; If[OddQ[v1i[c]], AN[[2;;n+1]]=AN[[2;;n+1]]/Table[2^(2^ii), {ii,0,n-1}]]], For[k=1, k<=n, k++, AppendTo[AN, (AN[[k]])^2+c^(2^k-1)]]]; AN);
+
+
+anrec[c_, n_] := (Clear[k]; AN:=List[1]; For[k=1, k<n, k++, AppendTo[AN, (AN[[k]])^2+c^(2^k-1)]]; AN);
+an[c_,n_]:=anrec[c,n][[n]]
+bnp[c_,n_]:=I*(an[c,n-1]+N[Sqrt[an[c,n]]])
+bnplist[c_,n_]:=Table[bnp[c,i], {i,2,n}]
+bnm[c_,n_]:=I*(an[c,n-1]-N[Sqrt[an[c,n]]])
+bnmlist[c_,n_]:=Table[bnm[c,i], {i,2,n}]
+denom[c_,n_]:= Table[c^(2^(i-1)), {i,1,n}]
+recreatef[c_,n_]:= anrec[c,n]/denom[c,n]
+fcnmodz[c_,n_,z_]:=(If[GCD[c,z]==1, denommodz:=Table[ModularInverse[Mod[c,z]^(Mod[2^(i-1), eul[z]]), z], {i,1,n}]; Return[Mod[anmodz[c,n,z]*denommodz, z]],Table[0, {Range[1,n]}]] )
+anbox[n_]:={#, anrec[#,6],issq /@ anrec[#,6]} & /@ cboxp[n]
+searchanbox[n_]:=Select[anbox[n], Length[Union[#[[3]][[2;;]]]]>1&]
+
+
+fn0list[c_, z_, n_]:=(fn0premod:=fblist[c,z,n]; Mod[fn0premod/.{x->0}, z])
+g21fn0list[z_,n_]:=Mod[g21modz[#, z] & /@ fn0list[-16,z,n], z]
+g22fn0list[z_,n_]:=Mod[g22modz[#, z] & /@ fn0list[-16,z,n], z]
+g23fn0list[z_,n_]:=Mod[g23modz[#, z] & /@ fn0list[8I,z,n], z]
+g24fn0list[z_,n_]:=Mod[g24modz[#, z] & /@ fn0list[8I,z,n], z]
+g23mfn0list[z_,n_]:=Mod[g23mmodz[#, z] & /@ fn0list[-8I,z,n], z]
+g24mfn0list[z_,n_]:=Mod[g24mmodz[#, z] & /@ fn0list[-8I,z,n], z]
+h1fn0list[s_,z_,n_]:=Mod[h1modz[#, s, z] & /@ fn0list[-(s^2-1)^2,z,n], z]
+h2fn0list[s_,z_,n_]:=Mod[h2modz[#, s, z] & /@ fn0list[-(s^2-1)^2,z,n], z]
+h11fn0list[s_,z_,n_]:=Mod[h11ymodz[#, s, z] & /@ fn0list[-(s^2-1)^2,z,n], z]
+h12fn0list[s_,z_,n_]:=Mod[h12ymodz[#, s, z] & /@ fn0list[-(s^2-1)^2,z,n], z]
+v1fn0list[z_,n_]:=Mod[v1modz[#, z] & /@ fn0list[48,z,n], z]
+v2fn0list[z_,n_]:=Mod[v2modz[#, z] & /@ fn0list[48,z,n], z]
+q1fn0list[m_,z_,n_]:=Mod[q1modz[#, m, z] & /@ fn0list[-m^2(m^2+2i),z,n], z]
+q2fn0list[m_,z_,n_]:=Mod[q2modz[#, m, z] & /@ fn0list[-m^2(m^2+2i),z,n], z]
+
+
+fn0modp[c_,p_]:={p, fn0list[c,p,10]}
+g21fn0modp[p_]:={p, g21fn0list[p,10]}
+g22fn0modp[p_]:={p, g22fn0list[p,10]}
+g23fn0modp[p_]:={p, g23fn0list[p,10]}
+g24fn0modp[p_]:={p, g24fn0list[p,10]}
+g23mfn0modp[p_]:={p, g23mfn0list[p,10]}
+g24mfn0modp[p_]:={p, g24mfn0list[p,10]}
+h1fn0modp[s_,p_]:={p, h1fn0list[s,p, 10]}
+h2fn0modp[s_,p_]:={p, h2fn0list[s,p,10]}
+h11fn0modp[s_,p_]:={p, h11fn0list[s,p, 10]}
+h12fn0modp[s_,p_]:={p, h12fn0list[s,p,10]}
+v1fn0modp[p_]:={p, v1fn0list[p, 10]}
+v2fn0modp[p_]:={p, v2fn0list[p,10]}
+q1fn0modp[m_,p_]:={p, q1fn0list[m,p, 10]}
+q2fn0modp[m_,p_]:={p, q2fn0list[m,p,10]}
+
+
+fn0modgp[c_,n_]:= fn0modp[c,#] & /@ gp[n]
+g21fn0modgp[n_]:= g21fn0modp /@ gp[n]
+g22fn0modgp[n_]:= g22fn0modp /@ gp[n]
+g23fn0modgp[n_]:= g23fn0modp /@ gp[n]
+g24fn0modgp[n_]:= g24fn0modp /@ gp[n]
+g23mfn0modgp[n_]:= g23mfn0modp /@ gp[n]
+g24mfn0modgp[n_]:= g24mfn0modp /@ gp[n]
+h1fn0modgp[s_,n_]:= h1fn0modp[s,#] & /@ gp[n]
+h2fn0modgp[s_,n_]:= h2fn0modp[s,#] & /@ gp[n]
+h11fn0modgp[s_,n_]:= h11fn0modp[s,#] & /@ gp[n]
+h12fn0modgp[s_,n_]:= h12fn0modp[s,#] & /@ gp[n]
+v1fn0modgp[n_]:= v1fn0modp /@ gp[n]
+v2fn0modgp[n_]:= v2fn0modp /@ gp[n]
+q1fn0modgp[m_,n_]:= q1fn0modp[m,#] & /@ gp[n]
+q2fn0modgp[m_,n_]:= q2fn0modp[m,#] & /@ gp[n]
+
+
+modpsqrts[list_,p_]:= sqrtmodz[#, p] & /@ list
+
+
+fn0sqrts[c_,p_,n_]:={p, modpsqrts[fn0list[c, p, n], p]} 
+g21fn0sqrts[p_]:={p, modpsqrts[g21fn0list[p,10], p]}
+g22fn0sqrts[p_]:={p, modpsqrts[g22fn0list[p,10], p]}
+g23fn0sqrts[p_]:={p, modpsqrts[g23fn0list[p,10], p]}
+g24fn0sqrts[p_]:={p, modpsqrts[g24fn0list[p,10], p]}
+g23mfn0sqrts[p_]:={p, modpsqrts[g23mfn0list[p,10], p]}
+g24mfn0sqrts[p_]:={p, modpsqrts[g24mfn0list[p,10], p]}
+h1fn0sqrts[s_,p_]:={p, modpsqrts[h1fn0list[s,p,10], p]}
+h2fn0sqrts[s_,p_]:={p, modpsqrts[h2fn0list[s,p,10], p]}
+h11fn0sqrts[s_,p_]:={p, modpsqrts[h11fn0list[s,p,10], p]}
+h12fn0sqrts[s_,p_]:={p, modpsqrts[h12fn0list[s,p,10], p]}
+v1fn0sqrts[p_]:={p, modpsqrts[v1fn0list[p,10], p]}
+v2fn0sqrts[p_]:={p, modpsqrts[v2fn0list[p,10], p]}
+q1fn0sqrts[m_,p_]:={p, modpsqrts[q1fn0list[m,p,10], p]}
+q2fn0sqrts[m_,p_]:={p, modpsqrts[q2fn0list[m,p,10], p]}
+
+
+fn0sqrtsgp[c_,n_, m_]:=fn0sqrts[c,#,n] & /@ gp[m]
+g21fn0sqrtsgp[n_]:=g21fn0sqrts  /@ gp[n]
+g22fn0sqrtsgp[n_]:=g22fn0sqrts /@ gp[n]
+g23fn0sqrtsgp[n_]:=g23fn0sqrts /@ gp[n]
+g24fn0sqrtsgp[n_]:=g24fn0sqrts  /@ gp[n]
+g23mfn0sqrtsgp[n_]:=g23mfn0sqrts /@ gp[n]
+g24mfn0sqrtsgp[n_]:=g24mfn0sqrts  /@ gp[n]
+
+
+h1fn0sqrtsgp[s_,n_]:=h1fn0sqrts[s, #] & /@ gp[n]
+h2fn0sqrtsgp[s_,n_]:=h2fn0sqrts[s, #] & /@ gp[n]
+h11fn0sqrtsgp[s_,n_]:=h11fn0sqrts[s, #] & /@ gp[n]
+h12fn0sqrtsgp[s_,n_]:=h12fn0sqrts[s, #] & /@ gp[n]
+v1fn0sqrtsgp[n_]:=v1fn0sqrts /@ gp[n]
+v2fn0sqrtsgp[n_]:=v2fn0sqrts /@ gp[n]
+q1fn0sqrtsgp[m_, n_]:=q1fn0sqrts[m, #] & /@ gp[n]
+q2fn0sqrtsgp[m_,n_]:=q2fn0sqrts[m, #] & /@ gp[n]
+
+
+fn0sqrtsgp[c_,n_]:=fn0sqrts[c,#, 10] & /@ gp[n]
+fn0modz[c_,z_,n_]:= (Clear[k]; If[GCD[c,z]==1, FN0:=List[ModularInverse[c,z]]; For[k=1, k<n, k++, AppendTo[FN0, Mod[(FN0[[k]])^2+ModularInverse[c,z], z]]]; FN0, FN0:=Table[0, {Range[1,n]}]; FN0]);
+
+
+eps[c_,n_]:=Sqrt[c]*Log[N[Sqrt[an[c,n]]+an[c,n-1]]/N[Sqrt[an[c,n]]-an[c,n-1]]]
+listeps[c_,n_]:=Table[eps[c,i], {i,2,n}]
+limeps[c_]:=Sqrt[c]*Log[N[1+Sqrt[F[c]]]/N[1-Sqrt[F[c]]]]
+chkbound[n_]:=Select[cbox[n], Union[Table[Abs[(listeps[#,10]/#)[[i]]]<= 2Log[1+Sqrt[2]], {i, 1,9}]]!={True} &]
+
+
+Select[cbox[10], MemberQ[(issq /@ anrec[#,5])[[2;;]],True] &]
+wnrec[i_,m_,n_]:=(anrec[m^2,n]+Table[(-1)^i*I*m^(2^ii-1), {ii,1,n}])
+recreateg[i_, m_,n_]:=wnrec[i,m,n]/denom[m^2,n]
+Testg[i_,n_]:=Select[cbox[n], recreateg[i,#,n] != listg0[i,#,n] &]
+wn[i_,m_,n_]:=wnrec[i,m,n][[n]]
+
+
+wnmodz[i_,m_,n_,z_]:=Mod[anmodz[m^2,n,z]+Mod[Table[(-1)^i*I*m^(Mod[2^ii-1,eul[z]]), {ii,1,n}],z], z]
+
+
+anmodz[c_,n_,z_]:=(AN:=List[1]; 
+For[k=1, k<n, k++, AppendTo[AN, Mod[(AN[[k]])^2+c^(Mod[2^k-1, eul[z]]), z]]]; AN);
+
+
+rationalmodz[q_, z_]:= Mod[Numerator[q]*ModularInverse[Denominator[q],z],z];
+
+
+ginmodz[i_,m_,z_]:=(fnlist:= listg0[m^2,10]; clsr[rationalmodz[#,z],z] & /@ fnlist)
+
+
+hinmodz[fun_,m_,z_]:=(fnlist:=fun[#,m] & /@ listf0[m^2,10]; clsr[rationalmodz[#,z],z] & /@ fnlist)
+
+
+mprime[p_]:=Select[{#, p, Mod[#,p], anmodz[#^2,20,p], wnmodz[2,#,20,p], modpsqrts[wnmodz[2,#,20,p],p]} & /@ cbox[10], Union[#[[6]]]=={Null} &]
+wprime[i_,m_,n_]:=Select[{m, #, Mod[m,#], wnmodz[i,m,2n,#], modpsqrts[wnmodz[i,m,2n,#],#]} & /@ gp[n], Union[#[[5]][[n;;]]]==Null &]
+hprime[i_,s_,n_]:=Select[{s, #, hmodz[i,s,2n,#], modpsqrts[hmodz[i,s,2n,#],#]} & /@ gp[n], Union[#[[4]][[n;;]]]=={Null} &]
+eprime[i_,e_,n_]:={e, #, Mod[e,#], wnmodz[i,e,2n,#], modpsqrts[wnmodz[i,e,2n,#],#]} & /@ gp[n]
+
+
+cboxqq[m_,n_]:=Select[cboxx[m,n], Re[#] >= Im[#] >=0 &];
+Tupqq[m_,n_]:=Select[Tuples[{cbox[n],cboxqq[m,n]}], GCD[#[[1]],#[[2]]]==1 &]
+pattern[j_,modz_]:={j,modz, #, issq[#], issq[#+1], v1i[#], anmodz[#,10,modz],clsr[anmodz[#,10,modz],modz]}&/@ equivclass[j,modz,5]
+pattern1[j_,modz_]:={j,modz, #, issq[#], issq[#+1], v1i[#], wnmodz[1,#,10,modz], clsr[wnmodz[1,#,10,modz],modz]}&/@ equivclass[j,modz,5]
+pattern2[j_,modz_]:={j,modz, #, issq[#], issq[#+1], v1i[#], wnmodz[2,#,20,modz],clsr[wnmodz[2,#,20,modz],modz]}&/@ equivclass[j,modz,5]
+unique[j_,modz_]:=DeleteDuplicates[Table[x[[7]], {x,pattern[j,modz]}]]
+unique1[j_,modz_]:=DeleteDuplicates[Table[x[[7]], {x,pattern1[j,modz]}]]
+unique2[j_,modz_]:=DeleteDuplicates[Table[x[[7]], {x,pattern2[j,modz]}]]
+tfunique[j_,modz_]:=DeleteDuplicates[clsr[#,modz] &/@ unique[j,modz]]
+tfunique1[j_,modz_]:=DeleteDuplicates[clsr[#,modz] &/@ unique1[j,modz]]
+tfunique2[j_,modz_]:=DeleteDuplicates[clsr[#,modz] &/@ unique2[j,modz]]
+tfnobad[j_,modz_]:=Select[tfunique[j,modz],SubsetQ[Union[{1},2*Range[10],3*Range[10]],Flatten[Position[#,True]]] &]
+tfnobad1[j_,modz_]:=Select[tfunique1[j,modz],SubsetQ[Union[{1},2*Range[10],3*Range[10]],Flatten[Position[#,True]]] &]
+tfnobad2[j_,modz_]:=Select[tfunique2[j,modz],SubsetQ[Union[{1},3*Range[10]-1],Flatten[Position[#,True]]] &]
+tfnobad22[j_,modz_]:=Select[tfunique2[j,modz],SubsetQ[Union[2*Range[10]-1,3*Range[10]-1],Flatten[Position[#,True]]] &]
+Findmoduli[mm_, nn_] :=Select[Tupqq[mm,nn], tfunique @@ #  == tfnobad @@ # &];
+Findmoduli1[mm_, nn_] := Select[Tupqq[mm,nn], tfunique1 @@ #  == tfnobad1 @@ # &];
+Findmoduli2[mm_, nn_] :=Select[Tupqq[mm,nn], tfunique2 @@ #  == tfnobad2 @@ # &];
+Findmoduli22[mm_, nn_]:= Select[Tupqq[mm,nn], tfunique2 @@ #  == tfnobad22 @@ # &];
+
+
+ezmoduli[mmm_, nnn_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findmoduli[mmm, nnn]}]];
+ezmoduli1[mmm_, nnn_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findmoduli1[mmm,nnn]}]];
+ezmoduli2[mmm_, nnn_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findmoduli2[mmm, nnn]}]];
+ezmoduli22[mmm_, nnn_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findmoduli22[mmm, nnn]}]];
+Arrangedmoduli[m_,n_]:=(ezmoduliset=ezmoduli[m,n]; Moduliset=cboxqq[m,n]; arrangedreps=Table[{Table[zz[[1]], {zz,Select[ezmoduliset, #[[2]]==y &]}], y}, {y, Moduliset}]; arrangedreps)
+Arrangedmoduli1[m_, n_]:=(ezmoduliset1=ezmoduli1[m,n]; Moduliset1=cboxqq[m,n]; arrangedreps1=Table[{Table[zz[[1]], {zz,Select[ezmoduliset1, #[[2]]==y &]}], y}, {y, Moduliset1}]; arrangedreps1)
+Arrangedmoduli2[m_, n_]:=(ezmoduliset2=ezmoduli2[m,n]; Moduliset2=cboxqq[m,n]; arrangedreps2=Table[{Table[zz[[1]], {zz,Select[ezmoduliset2, #[[2]]==y &]}], y}, {y, Moduliset2}]; arrangedreps2)
+Arrangedmoduli22[m_, n_]:=(ezmoduliset22=ezmoduli22[m,n]; Moduliset22=cboxqq[m,n]; arrangedreps22=Table[{Table[zz[[1]], {zz,Select[ezmoduliset22, #[[2]]==y &]}], y}, {y, Moduliset22}]; arrangedreps22)
+tenpr=gp[10];
+cdis=cdiskk[1,178];
+bars={4I,1+I,1-I,-1-I,-1+I,3-I,-3-I,2+2I,-2+2I,9+3I,-9+3I,4-13I,-4-13I};
+valuesmodgp[c_]:=Table[{Mod[c,j], j}, {j, tenpr}];
+Universe:=Complement[cdis, bars];
+first:=Select[Universe, Length[Intersection[valuesmodgp[#],moduliset2]]>0 &];
+firstleft:=Complement[Universe, firstcongruences];
+presecond:=Select[firstleft, MemberQ[{issq[1+I*#], issq[#-I]}, True] ==False &];
+presecond0:=Select[firstleft, MemberQ[{issq[1+I*#], issq[#-I]}, True] ==True &];
+second:=Select[presecond, Length[Intersection[valuesmodgp[#],mset22]]>0 &];
+secondleft:=Complement[presecond, second]
+
+
+modtup[tuple_]:={Mod[tuple[[1]], tuple[[2]]], tuple[[2]]}
+NormFactors[c_]:={Np[#1],#1,#2} & @@@ facint[c]
+
+
+ListNormFactors[c_]:=(listnorms=NormFactors[c]; Flatten[Union[Table[Divisors[listnorms[[i]][[1]]], {i,Length[listnorms]}]]])
+
+
+Select[cbox[10], MemberQ[Mod[ListNormFactors[#]-7,8],0] || MemberQ[Mod[ListNormFactors[#]+1,8],0] & ]
+{#,Mod[ListNormFactors[#], 8]} & /@ %410
+Find2[n_]:=Select[cbox[10], (MemberQ[Mod[ListNormFactors[#]-7,8],0] || MemberQ[Mod[ListNormFactors[#]-5,8],0]) && (v1i[#]<=1) &]
+
+
+{#, Length[sqrtmodz[I,#]]} & /@ %
+
+
+test1st[j_,z_]:=SubsetQ[Union[{1},2*Range[10],3*Range[10]],Flatten[Position[tfunique[j,z][[1]],True]]]
+
+
+checkodd[n_]:={#, v1i[#], anmodz[#,10,n]} &/@ %439
+
+
+IndexTFQ[list_,indexlist_]:=SubsetQ[indexlist, Position[list,True]]
+RemovebadT[list_]:=Select[list, IndexTFQ[#, Union[2*Range[10], 3*Range[10]]] &]
+cull[list_]:=Select[list, Length[Union[#[[6]][[10;;20]]]]>1 &]
+mp[p_]:=cull[mprime[p]]
+disc[poly_]:=Discriminant[poly, x]
+q1p[m_,x_]:=x^2-(1-I)x/m-(I*m^2-1)/(m^2(m^2+2*I))
+q1m[m_,x_]:=x^2-(1+I)x/m+(I*m^2+1)/(m^2(m^2-2*I))
+q2p[m_,x_]:=x^2+(1-I)x/m-(I*m^2-1)/(m^2(m^2+2*I))
+q2m[m_,x_]:=x^2+(1+I)x/m+(I*m^2+1)/(m^2(m^2-2*I))
+fmp[m_]:=-m^2(m^2+2I)
+fmm[m_]:=-m^2(m^2-2I)
+
+
+anfraclist[c_]:=Table[absn[an[c,n-1]/Sqrt[c*an[c,n]]],{n,Range[2,10]}]
+checkam[c_,z_]:=anmodz[c,10,z]==Mod[anrec[c,10],z]
+checkwm[i_,m_,z_]:=wnmodz[i,m,10,z]==Mod[wnrec[i,m,10],z]
+Tup[n_]:=Select[Tuples[{cbox[n],Gprimes[n]}], GCD[#[[1]],#[[2]]]==1 &]
+
+
+Tupneq[n_]:=Select[Tuples[{cboxx[4,n],cboxx[4,n]}], absn[#[[1]]] > absn[#[[2]]] &]
+mindiff[n_]:=Min[Table[(absn[Exp[ x[[1]] ]]^2-1)/absn[x[[1]]]^2 -(absn[Exp[x[[2]]]]^2-1)/absn[x[[2]]]^2 , {x,Tupneq[n]}]]
+mineps[n_]:=Min[Table[absn[epsic[iii,jj]], {iii,Range[2,10]}, {jj, cboxx[3, n]}]]
+maxeps[n_]:=Max[Table[absn[epsic[iii,jj]], {iii,Range[2, 10]}, {jj, cboxx[3, n]}]]
+
+
+chktupan[n_]:=Select[Tup[n], checkam[#[[1]], #[[2]] ]==False &]
+chktupwn[i_,n_]:=Select[Tup[n], checkwm[i,#[[1]], #[[2]] ]==False &]
+chktupwn2[jj_,n_]:=Select[chktupwn[jj,n], clsr[wnmodz[jj,#[[1]],10,#[[2]]], #[[2]]]%[ !=clsr[Mod[wnrec[jj,#[[1]],10],#[[2]]],#[[2]]] &] 
+
+
+anbar[c_,n_]:=anrec[c,n]/Table[c^(2^(i-1)-1), {i,1,n}]
+anbarw[n_,nn_]:={#, N /@ (Abs /@ anbar[#,n])} & /@ cboxx[4,nn]
+F[c_]:=(1/2)*(1-Sqrt[1-4/c])
+anlim[c_]:=N[c*F[c]];
+Erranbar[c_,n_]:=Abs[N[anbar[c,n]-anlim[c]]]
+bound[c_]:=absn[2*Log[Sqrt[1+c (F[c])^2]+Sqrt[c]*F[c]]]
+DanbarQ[c_, n_] :=
+ If[N[Abs[anlim[c]]]>=2 && Length[
+   Select[Table[
+  	N[Abs[anlim[c]] - (1 + Abs[xx^2/c])], {xx,
+   	cdiskk[1, anlim[c]]}], Element[#, NegativeReals] &] == 0],
+  Return[True], Return[False]]
+Danbar[c_,n_]:=Table[
+  	N[Abs[anlim[c]] - (1 + Abs[xx^2/c])], {xx,
+   	cdiskk[1, anlim[c]]}]
+Oldlim[n_,m_]:=Complement[cbox[n],Select[cbox[n], Erranbar[#,m]<.1 &]]
+Select[cbox[10], anbar[c,n]
+NOld[n_,m_]:=Length[Oldlim[n,m]]
+cfac[c_]:=Select[Tuples[{cbox1[Round[Abs[c]]],cbox1[Round[Abs[c]]]}], #[[1]]*#[[2]] ==c && GCD[#[[1]],#[[2]]]==1 &];
+mindiff[n_]:=Min[Table[Abs[absn[c+1]-absn[c]],{c, cbox0[n]}]]
+minq[n_]:=N[Min[Table[q[cc], {cc, cbox[n]}]]]
+selectkn[k_,n_]:=Select[cbox[n], Np[#]==k &]
+lineup[list_]:=Select[list, Abs[#[[2]]]>Abs[#[[1]]] &]
+cfacbar[c_]:=Select[cfac[c], issq[#[[1]]] || issq[#[[2]]] &]
+q[c_]:=Min[Table[Abs[xx[[2]]/xx[[1]]], {xx,lineup[cfac[c]]}]]
+
+
+q1[c_]:=( If[Im[c]==0, qfactors0=facint[I*c], qfactors0=facint[c]]; qfactors1={}; For[i=1, i<=Length[qfactors0], For[j=1, j<=qfactors0[[i]][[2]], AppendTo[qfactors1, {qfactors0[[i]][[1]]^j, c/qfactors0[[i]][[1]]^j}]]]; qfactors=lineup[gfactors1]; qfactorsrat={}; For[i=1, Length[qfactors], AppendTo[qfactorsrat, Abs[qfactors[[i]][[2]]/qfactors[[i]][[1]]]]]; If[Length[qfactorsrat]==0, kill(i); kill(j); Abs[c], kill(i); kill(j); Min[N[qfactorsrat]]]);
+
+
+epsq[c_]:=N[epsc[Abs[c]]/Log[q[c]]]
+epsq1[c_]:=N[epsc[Abs[c]]/Log[Sqrt[1+1/Abs[c]]]]
+qbar[c_]:=Min[Table[Abs[x[[2]]/x[[1]]], {x,lineup[cfacbar[c]]}]]
+epsi[n_,c_]:=Sqrt[c]*Log[(Sqrt[an[c,n]]+an[c,n-1])/(Sqrt[an[c,n]]-an[c,n-1])]
+epsic[n_,c_]:=Log[(Sqrt[an[c,n]]+an[c,n-1])/(Sqrt[an[c,n]]-an[c,n-1])]
+expsi[n_,c_]:=(Sqrt[an[c,n]]+an[c,n-1])/(Sqrt[an[c,n]]-an[c,n-1])
+epsiz[z_,c_]:=Sqrt[c]*Log[(Sqrt[c+z^2]+z)/(Sqrt[c+z^2]-z)]
+eps[c_]:=Sqrt[c]*Log[(1+Sqrt[F[c]])/(1-Sqrt[F[c]])]
+epsc[c_]:=Log[(1+Sqrt[F[c]])/(1-Sqrt[F[c]])]
+epscabs[c_]:=Log[(1+Sqrt[F[Abs[c]]])/(1-Sqrt[F[Abs[c]]])]
+epsilist[n_,c_]:=Table[epsi[ii,c],{ii, Range[2,n]}]
+epsiclist[n_,c_]:=Table[epsic[ii,c],{ii, Range[2,n]}]
+epsicTF[n_,c_]:=Table[absn[epsic[ii,c]]<absn[epscabs[c]],{ii, Range[2,n]}]
+expsilist[n_,c_]:=Table[expsi[ii,c],{ii, Range[2,n]}]
+minabsarg[n_,c_]:=Min[absarglist[n,c]]
+absarglist[n_,c_]:= Table[absn[(Sqrt[an[c,ii]]+an[c,ii-1])/(Sqrt[an[c,ii]]-an[c,ii-1])], {ii,2, n}]
+Erreps[n_,c_]:=Abs[N[epsilist[n,c]]]-epsabs[c]
+epsabs[c_]:=Abs[eps[c]]
+maxmn[m_,n_]:=Max[epsq /@ cboxx[m,n]]
+
+
+epsizmax[n_]:=Max[Table[Abs[N[epsiz[cc,zz]]], {cc,cbox[n]},{zz,cbox[n]}]]
+
+
+anbarmax[n_] := (recordtable:=Table[{cc, Max[Abs[N[anbar[cc, 10]]]]}, {cc, cboxx[3,n]}];
+  MM := Max[Table[Max[Abs[N[anbar[cc, 10]]]], {cc, cboxx[3,n]}]]; Select[recordtable, #[[2]] == MM &])
+Table[N[Abs[2*Log[Sqrt[yy+zz^2]+zz]-Log[yy]]], {yy, {-4,4I,-4I}},{zz,Union[anbar[-4,4],anbar[4I,4],anbar[-4I,4]]}]
+Table[N[Abs[2*Log[Sqrt[4+zz^2]+zz]-Log[4]]],{zz,anbar[4,4]}]
+expsimax[n_] := (recordtable:=Table[{cc, Max[Abs[N[expsilist[10,cc]]]]}, {cc, cboxx[3,n]}];
+  MMM := Max[Table[Max[Abs[N[expsilist[10,cc]]]], {cc, cboxx[3,n]}]]; Select[recordtable, #[[2]] == MMM &])
+epsicmax[n_] := (recordtable:=Table[{cc, Max[Abs[N[Log[expsilist[10,cc]]]]]}, {cc, cboxx[3,n]}];
+  MMM := Max[Table[Max[Abs[N[Log[expsilist[10,cc]]]]], {cc, cboxx[3,n]}]]; Select[recordtable, #[[2]] == MMM &])
+absn[list_]:=Abs[N[list]]
+
+
+gcdansq[c_,n_]:=(s=Sqrt[an[c,n]]; If[gIntegerQ[s], Return[GCD[s+an[c,n-1], s-an[c,n-1]]]])
+
+
+Select[Tuples[{cbox0[5],cbox[5]}], gIntegerQ[(#[[1]]-1)/#[[2]]] && gIntegerQ[#[[1]]/(#[[2]]+1)]&]
+
+
+TFsq[c_]:=gIntegerQ /@ (Sqrt /@ anrec[c,5])
+Findsquares[n_]:=Select[{#, TFsq[#], Position[TFsq[#], True]} & /@ cbox[n], Length[#[[3]]] >1 &]
+
+
+Findgcds[n_]:={#[[1]], #[[2]], gcdansq[#[[1]],2]} & /@ ({#[[1]],#[[2]]} & /@ Findsquares[n])
+
+
+cs[c_]:=c/GCD[Re[c],Im[c]]
+dna[c_] := Abs[c]^2/GCD[Re[c],Im[c]]
+dnw[m_] :=   (Abs[m]^2/GCD[Re[m],Im[m]])^2 /2^(1-Boole[EvenQ[v1i[m]]])
+dnak[c_,k_]:=  If[EvenQ[v1i[c]], dna[c]^(2^(k-1)), (dna[c]^2/2)^(2^(k-1))]
+dnwk[m_,k_]:= dnw[m]^(2^(k-1))
+dnakmodz[m_,k_,z_]:=Mod[dnw[m]^(Mod[2^(k-1),eul[z]])/m,z]
+
+
+
+recreatef1[c_,n_]:= (If[EvenQ[v1i[c]], Print[even]; DN:=Table[dna[c]^(2^(i-1)), {i,n+1}], Print[neither]; DN:=Join[{dna[c]},Table[dna[c]^(2^(i-2)), {i, 2, n+1}]]]; AN:=anrec[c,n]; AN/DN)
+denoms[n_]:={#, (Denominator /@ listf0[#, 1])[[1]]} & /@ cbox[n]
+listratio[list_]:=Table[list[[i+1]]/list[[i]]^2, {i, Length[list]-1}];
+
+
+denomsk[c_, k_] :=
+  If[EvenQ[v1i[c]], {c, v1i[c], Denominator /@ listf0[c, k],
+	Table[dna[c]^(2^i), {i, 0, k - 1}]}, {c, v1i[c],
+	Denominator /@ listf0[c, k],
+	Join[{dna[c]}, Table[(dna[c]^2/2)^(2^i), {i, 0, k - 2}]]}];
+denomswk[m_,k_]:={m, v1i[m], Denominator /@ listg0[1,m, k],
+	Table[dnw[m]^(2^i), {i, 0, k - 1}]}
+
+
+dratio[n_,k_]:={#1, #2, listratio[#2]} & @@@ denomsnk[n,k]
+denomsw[i_,n_]:={#, (Denominator /@ listg0[i,#, 1])[[1]]} & /@ cbox[n]
+denomswn[n_]:={#, (Denominator /@ listg0[1,#, 5]), v1i[#]} & /@ cbox[n]
+dratiow[n_,k_]:={#1, #2, listratio[#2]} & @@@ denomswnk[n,k]
+shr[n_]:=Select[denoms[n], #[[2]]==Abs[#[[1]]]^2/GCD[Re[#[[1]]],Im[#[[1]]]] &]
+shrw[i_, n_]:= Select[denomsw[i,n], #[[2]]==Abs[#[[1]]]^4/2^v1i[#[[1]]] &]
+ssw[i_,n_]:=Select[denomsw[i,n], #[[2]]==Abs[#[[1]]]^2 &]
+tst[list_]:={Abs[#1], v1i[#1], #1, #2} & @@@ list
+tstw[list_]:=Select[{Abs[#1], v1i[#1], #1, #2, Abs[#1]^4/2^v1i[#1]} & @@@ list, #[[4]]!=#[[5]] & ]
+an[c_,n_]:= Last[anrec[c,n]];
+ratio[c_,n_]:=absn[an[Abs[c],n-1]/Sqrt[an[c,n]]]
+tabrat[c_,n_]:=Table[ratio[c,ii], {ii,Range[2,n]}];
+wn[i_,m_,n_]:= Last[wnrec[i,m,n]];
+
+
+sortabs[list_]:=(assoc:= Association[Table[zz->Abs[zz]^2, {zz,list}]]; Return[Keys[Sort[assoc]]]);
+cbox[n_]:=(Clear[ii,jj]; sortabs[Complement[Flatten[Table[ii+jj*I, {ii,Range[-Abs[n],Abs[n]]},{jj,Range[-Abs[n],Abs[n]]}]],{0,1,-1,I, -I}]])
+cbox1[n_]:=(Clear[ii,jj]; sortabs[no0[Flatten[Table[ii+jj*I, {ii,Range[-n,n]},{jj,Range[-n,n]}]]]])
+cbox0[n_]:=Join[{0},cbox1[n]]
+cboxx[m_,n_]:=Complement[cbox[n],cbox[m]];
+cdisk[n_]:=Select[cbox[Round[Abs[n]]], N[Abs[#]]<=Round[Abs[n]] &];
+cdisk0[n_]:=Select[cbox0[Round[Abs[n]]], N[Abs[#]]<=Round[Abs[n]] &];
+cdisk0p[n_]:=(If[Re[n]!=0 && Im[n]!=0, Return[Select[cbox0[Round[Abs[n]]], N[Abs[#]]<=Round[Abs[n]] && Re[n]>=Re[#]>=0 && Im[n]>=Im[#]>=0 &]]]; If[Re[n]==0 || Im[n]==0,  Return[Select[cbox0[Round[Abs[n]]], N[Abs[#]]<=Round[Abs[n]] && Abs[n]>Re[#]>=0 && Abs[n]>Im[#]>=0 &]]])
+cdiskk[m_,n_]:=Complement[cdisk[n],cdisk[m]];
+cboxp[n_]:=Select[cbox[n], GCD[#,1+I]==1 && issq[#]==False && issq[#+1] == False &]
+cboxq[n_]:=Select[cbox[n], Re[#]>0 && Im[#]>=0 &];
+cboxodd[n_]:=Select[cbox[n], issq[#]==False && issq[#+1]==False &]
+cboxiq2[n_]:=I*cbox[n]^2
+
+
+cboxfacts[n_]:={#,v1i[#], nfctlistf[#,5], v1i[#]} & /@ Select[cbox[n],GCD[#,1+I]!=1 &]
+
+
+searchcbox:=Select[cboxp[n], Union[nfctlistf[#,5]]!={1}&]
+searchodd[n_]:=Select[{#,nfctlistf[#,4], issq /@ anrec[#,4]}& /@ cboxodd[n], Union[#[[2]]]!= {1} || Union[#[[3]][[2;;4]]]!={False} &]
+
+
+searchbn[n_]:=Select[{#,nfctlistf[#,4], issq /@ anrec[#,4]}& /@ cbox[n], Union[#[[3]][[2;;4]]]!={False} &]
+searchbnm[n_]:=Table[x[[1]], {x, searchbn[n]}]
+
+gPrimeQ[x_]:=PrimeQ[x, GaussianIntegers->True];
+Findprimeinv[n_]:=Select[gp[15], gPrimeQ[ModularInverse[#,2^n]]&]
+findnonsq[n_]:=Select[cbox[n],Mod[#,1+I]!=0 && MemberQ[EvenQ[exponents[#]],True]==False &]
+exponents[c_]:=Table[x[[2]], {x, Com[facint[c],{{-1,1},{-I,1},{I,1}}]}]
+facint[xx_]:=FactorInteger[xx, GaussianIntegers->True];
+v[p_,z_]:= (If[PrimeQ[p, GaussianIntegers->True], factors=facint[z]; M=Select[factors, #[[1]]==p &]; If[Length[M]==0, Return[0], M[[1]][[2]]] ]);
+v1ii[z_]:=v[1+I,z]
+gIntegerQ[x_] := IntegerQ[Re[x]] && IntegerQ[Im[x]]
+gRationalQ[x_]:= If[gIntegerQ[x]!=True, gIntegerQ[Numerator[x]], True]
+floatIntegerQ[x_]:=If[Round[x]==x, True, False]
+
+
+cboxp[n_]:=Select[Tup[n], GCD[#,1+I]==1 && issq[#]==False && issq[#+1] == False &]
+
+
+checkan[c_,n_] := (AN=anrec[c,n]; 
+If[EvenQ[v1i[c]], 
+Table[AN[[i]]/(Abs[c]^(2^i)), {i, n}], 
+Z=Table[(2^(2^(i-2)))*AN[[i]]/(Abs[c]^(2^i)), {i, n}]; Z[[1]]*=Sqrt[2]/2; Z
+]);
+Select[cbox[10], checkan[#,6]!=listf0[#,6] &]
+checkwn[i_,m_,n_] := (WN=wnrec[i,m,n]; Table[WN[[j]]/(Abs[m^2]^(2^j)), {j, n}]);
+
+
+checkvalsan[n_, k_]:= Select[cbox[n], numf0[#,k+1]!=anrec[#,k] &]
+checkvalswn[n_, k_]:= Select[cbox[n], numg0[1,#,k][[3;;k]] != wnrec[1,#,4][[3;;k]] &]
+
+
+checkvalsanmod[c_,n_,z_]:= Select[cbox[n], anmodz1[c,n,z] != anmodz[c,n,z]]
+anmodz1[c_,n_,z_]:= Mod[# ,z] & /@ anrec[c,n]
+
+
+
+issqfaclistf[m_, n_]:= {#, issq /@ listf0[#,n], nfctlistf[#, n]} & /@ cbox[m]
+issqfaclistg[i_, m_, n_]:= {#, issq /@ listg0[i,#,n], nfctlistg[i, #, n]} & /@ cbox[m]
+
+
+sortres[z_]:=(dr=Ceiling[Abs[z]^2/2]; sortabs[cbox[dr]]);
+
+
+
+resclasses[z_]:=(SR:= Union[Mod[sortres[z],z]]; LenSR:=Length[SR]; diff:= Table[Mod[SR[[i]]-SR[[j]], z], {i,1,LenSR}, {j,1,LenSR}]; subdiagzeros:=List[]; For[i=1, i<=LenSR, i++, For[j=1, j<=LenSR, j++, If[j<i && diff[[i,j]]==0, AppendTo[subdiagzeros,i]]]]; zer0z:= Union[subdiagzeros]; Z0:=Complement[Range[LenSR],zer0z]; DR:= List[]; For[i=1, i<=Length[Z0], i++, AppendTo[DR, SR[[Z0[[i]]]]]]; Return[DR]);
+
+
+isnonsqmodz[list_, z_] := (truthvals := List[]; 
+   listmodz = Mod[list, z]; SQres=SQres[z];
+   For[i = 1, i <= Length[list], i++, Qi = resclass[listmodz[[i]], z]; If[MemberQ[SQres, Qi] == True, AppendTo[truthvals, Qi], AppendTo[truthvals, nonsquare]]]; Print[truthvals]);
+
+
+isnonsqmodz0[list_, z_] := (truthvals := List[]; 
+   listmodz = Mod[list, z]; SQres=SQres[z];
+   For[i = 1, i <= Length[list], i++, Qi = resclass[listmodz[[i]], z]; If[MemberQ[SQres, Qi] == True, AppendTo[truthvals, Qi], AppendTo[truthvals, 0]]]; Print[truthvals]);
+ 
+eul[zzz_]:=(t=Norm[zzz]^2; S=FactorInteger[zzz,GaussianIntegers->True]; For[i=1, i<=Length[S], i++, p=S[[i]][[1]]; If[Norm[p]>1, t*=(1-1/(Norm[p]^2))]]; t)
+
+
+Np[zzzz_]:=Norm[zzzz]^2
+
+
+primes3mod4[n_]:=Select[gp[n], Mod[Norm[#]+1,4]==0 || Mod[Np[#]+1,4]==0 &]
+Whi[n_]:=Select[cbox[n], clsr[{I},#]=={True} &]
+
+
+issqan[c_,n_, z_]:=(Print[{c,z}]; isnonsqmodz0[anmodz1[c,n,z],z]);
+issqwn[j_,m_,n_ ,z_]:=( Print[{m,z}]; isnonsqmodz0[wnmodz[j,m,n,z],z]);
+
+
+resclass[z1_, z_] := (Return[DR[[Position[Table[Mod[z1 - DR[[i]], z], {i, Length[DR]}], 
+        0][[1]]]][[1]]]);
+
+
+DRandSQ[z_] := (resclasses[z]; SQres:=SQres[z];);
+
+
+SQr[z_]:=Union[Mod[squares0[floorz[z]], z]]
+TFsqrs[element_]:=(If[Length[element] != 0, Return[True], Return[False]])
+clsr[listi_, zzzz_]:= (squres=SQr[zzzz]; MemberQ[squres, #] & /@ listi)
+clsr1[listi_, zzzz_]:= (squres=modpsqrts[listi, zzzz]; Table[TFsqrs[squres[[i]]], {i, Length[squres]}])
+
+
+inp[]:= (L:=Association[]; modz:=1; While[modz!=0, modz=Input["please input modulus"];ji:=1; While[ji!=0, ji=Input["input m for that modulus"]; If[modz!=0 && ji!=0, AppendTo[L,ji->modz]];]]; Return[L]); 
+
+
+modznprimes[z_,n_]:=Table[Mod[z,i], {i,Gprimes[n]}];
+Modzmpwr[z_, m_, pwr_]:=Table[Mod[z,m^i], {i, Range[pwr]}];
+Gprimes[n_]:=sortabs[Select[cbox[n], PrimeQ[#, GaussianIntegers->True] && Re[#]>= 0 && Im[#]>= 0 &]];
+
+
+sqmodpwrs[m_, pwr_]:=Table[squares[Ceiling[(Abs[m^i]^2)/2]], {i, Range[pwr]}]
+
+
+testsquaremod[z_, m_, pwr_]:=(sqlist=sqmodpwrs[m,pwr]; kk=Modzmpwr[z,m,pwr]; Table[MemberQ[sqlist[[i]], kk[[i]]], {i, Range[pwr]}]);
+
+
+Tablemodsq[list_, n_, pwr_]:=Flatten[Table[{x,y, testsquaremod[x,y,pwr]}, {x, list}, {y, Gprimes[n]}],1];
+
+
+FindFT[list_, n_, pwr_]:=(table=Tablemodsq[list,n,pwr]; table1=Select[table, Length[Intersection[ ((#-1) &) /@ Position[#[[3]],False], Position[#[[3]],True]]]>0 &]; table1); 
+
+
+FFT[list_]:=Select[list, Length[Intersection[ ((#-1) &) /@ Position[#[[3]],False], Position[#[[3]],True]]]>0 &];
+minusone[list_]:= (#-1) & /@ list
+listFT[list_]:= Select[list, Length[ Intersection[ ((#-1) &) /@ Position[#,False], Position[#,True]] ]>0 &];
+
+
+Bool[vec_]:=(truthvalsBool=List[]; For[i=1, i<Length[vec], i++, k=MemberQ[ LM[[i]],vec[[i]] ]; AppendTo[truthvalsBool,k]]; truthvalsBool);
+
+
+Findvals[vec_]:=(If[Union[Bool[vec]]=={False}, k=True, k=False]; Return[k])
+
+
+Findvalsmod[z_]:= (Findvals[modzprimes[z]]);
+
+
+Findzs[n_]:=Select[cbox[n], Findvalsmod[#] &];
+
+
+gfac[poly_]:=Factor[poly, GaussianIntegers->True];
+nfac[poly_]:=If[Exponent[First[gfac[poly]],x] ==0 , Length[gfac[poly]]-1, Length[gfac[poly]]];
+
+
+gfacf[c_,n_]:=gfac[fcn[c,n]];
+
+
+gfacg[i_, m_,n_]:=gfac[g[i,m,n]];
+
+
+nfctf[c_,n_]:= If[Exponent[First[gfacf[c,n]],x] ==0 , Length[gfacf[c,n] ]-1, Length[gfacf[c,n]]];
+
+
+nfctg[i_, m_, n_]:=If[Exponent[First[gfacg[i,m,n]],x]==0 , Length[gfacg[i,m,n]]-1, Length[gfacg[i,m,n]]];
+
+
+nfctlistf[c_,n_] := nfctf[c,#] &/@ Range[n]
+nfctlistg[l_,m_,n_] := nfctg[l, m, #] &/@ Range[n]
+
+
+factabf[n_]:=Table[{z, nfctlistf[z,5], issq /@ anrec[z, 5]},{z,cbox[n]}];
+
+
+factabg[i_, n_]:=Table[{z, nfctlistg[i,z,5], issq /@ wnrec[i, z, 5]},{z,cbox[n]}];
+
+
+searchf[n_, m1_, m2_, m3_]:=Select[factabf[n], #[[2]][[1]]==m1 & && #[[2]][[2]]==m2 & && #[[2]][[3]]==m3 &]; 
+
+
+searchg[i_, n_, m_, k_]:=Select[factabg[i,n], #[[2]][[m]]==k &]; 
+
+
+valuesf[n_, m_, k_]:=(fvals=searchf[n,m,k]; Table[fvals[[z]][[1]], {z, Length[fvals]}]) 
+
+
+valuesg[i_,n_, m_, k_]:= (gvals=searchg[i,n,m,k]; Table[gvals[[z]][[1]], {z, Length[gvals]}]) 
+
+
+issq[zz_]:=(If[gRationalQ[zz], 
+If[Abs[zz]==1, If[Re[zz]==zz, Return[True], Return[False]],
+factorlist=Complement[facint[zz],{{-1,1}}]; evenfactors=Select[factorlist, EvenQ[#[[2]]]==True &]; If[factorlist==evenfactors, Return[True], Return[False]]], Return[False]];)
+
+
+checkbnp[n_,m_]:={#, bnplist[#,n], issq /@ bnplist[#,n]} & /@ cbox[m]
+checkbnm[n_,m_]:={#, bnmlist[#,n], issq /@ bnmlist[#,n]} & /@ cbox[m]
+searchbnp[n_,m_]:=Select[checkbnp[n,m], Union[#[[3]]]!={False} &]
+searchbnm[n_,m_]:=Select[checkbnm[n,m], Union[#[[3]]]!={False} &]
+
+
+nfaclist[list_]:=(list1=Complement[list, {0}]; Table[{i,nfctf[i,#] &/@ Range[5]},{x,list1}])
+
+
+nfaclistg[l_, list_]:=(list2=Complement[list, {0}]; Table[{x,nfctg[l, x, #] &/@ Range[5]},{x,list2}])
+
+
+searchlist[list_, m_,k_]:=Select[list, #[[2]][[m]]==k &];
+valueslist[list_]:=Table[z[[1]], {z, list}];
+
+
+multiples[j_, n_] := Table[j*k, {k, cbox[n]}];
+multiples0[j_, n_] := Table[j*k, {k, cbox0[n]}];
+equivclass[mm_, modz_, n_]:=Table[mm+kk*modz, {kk, cbox0[n]}];
+
+
+squares[n_]:= Union[Table[s^2, {s, cbox[n]}]];
+squares0[n_]:=Union[Table[s^2, {s, cbox0[n]}]];
+sbadset={3, -3, 5, -5, 56, -56};
+mbadset={48, -1-2*I, -1+2*I};
+bad={0,-1,I,-I};
+twoset={8*I,-8*I, -16};
+sgoodset[n_]:=Complement[cbox[n], sbadset];
+sgsq0[n_]:=Union[Table[-(s^2-1)^2, {s, sgoodset[n]}]];
+
+
+mgoodset[n_]:=Complement[cbox[n],mbadset]
+
+
+fourmp0[n_]:=Union[Table[4m^2(m^2+1), {m, mgoodset[n]}]];
+fourmp[n_]:=Complement[fourmp0[n], {0}];
+fourmm0[n_]:=Union[Table[4m^2(m^2-1),{m,mgoodset[n]}]];
+fourmm[n_]:=Complement[fourmm0[n], {0}];
+ftestp[n_]:=Union[Table[m^2(2*I-m^2),{m,mgoodset[n]}]];
+ftestm[n_]:=Union[Table[-m^2(m^2+2*I),{m,mgoodset[n]}]];
+ftest[n_]:=Union[ftestp[n],ftestm[n]];
+fourset[n_]:=Intersection[Union[fourmp[n], fourmm[n]],cbox[n]];
+
+
+bad={0,-1,I,-I};
+twoset={8*I,-8*I, -16};
+mbadset={48, -1-2*I, -1+2*I};
+sgsq[n_]:= Complement[ssq0[n], {0}];
+sbsq =Union[Table[-(s^2-1)^2,{s, sbadset}]]
+abvcat[n_]:=Union[sgsq[n],mbadset, sbsq, twoset, fourset[n], bad];
+squaresno[n_]:=Complement[squares[n],abvcat[n]];
+cboxno[n_]:=Complement[cbox[n], squaresno[n], abvcat[n]];
+twomp[n_]:=Select[cbox[n], issq[1+I*#] == False &];
+twomn[n_]:=Select[cbox[n], issq[1-I*#] == False &];
+twom[n_]:=Table[mm^2, {mm, Union[twomp[n],twomn[n]]}];
+
+
+chk[list_]:={#, nfctlistf[#,4]} & /@ list ;
+chk1[n_]:=Select[chk[cboxno[n]], Union[#[[2]]] != {1} &];
+chk2[n_]:=Select[chk[squaresno[n]], Union[#[[2]]] != {2} &];
+Testequivclass[j_, modz_, n_]:=(Clear[i]; class=equivclass[j,modz, n]; Clear[i]; For[i=1, i<= Length[class], i++, ci=class[[i]]; If[Union[clsr[anmodz[ci,20,modz],modz], True], Print[ci]; Print[anrec[ci,4]]; Print[issq /@ anrec[ci, 4]];Print[nfctf[ci, #] & /@ Range[4]]]]);
+
+
+Testequivclassg[l_, j_, z_, n_]:=(class=equivclass[j,z, n]; Clear[m]; M=Table[{m, z, clsr[wnmodz[l,m,20,z],z]},{m, class}]; Complement[M,Select[M, SubsetQ[Union[3*Range[10]-1],Flatten[Position[#[[3]], True]]] &]] );
+Testequivclassg1[l_, j_, z_, n_]:=(class=equivclass[j,z, n]; Clear[m]; M=Table[{m, z, clsr[wnmodz[l,m,20,z],z]},{m, class}]; Complement[M,Select[M, SubsetQ[Union[3*Range[10]-1, 2*Range[10]-1],Flatten[Position[#[[3]], True]]] &]] );
+Testequivclassan[j_, modz_,n_]:=(class=equivclass[j,z,n]; Clear[m, M]; M=Table[{m, z, clsr[anmodz[m,20,z],z]},{m, class}]; Complement[M,Select[M, SubsetQ[2*Range[10],Flatten[Position[#[[3]], True]]] &]] );
+Testequivclassan1[j_, modz_,n_]:=(class=equivclass[j,z,n]; Clear[m, M]; M=Table[{m, z, clsr[anmodz[m,20,z],z]},{m, class}]; Complement[M,Select[M, SubsetQ[[3*Range[10],Flatten[Position[#[[3]], True]]] &]] );
+
+
+s1[j_,z_]:=Testequivclassan[j,z,6];
+sl1[j_,z_]:=Length[s1[j,z]];
+s11[j_,z_]:=Testequivclassan1[j,z,6];
+sl11[j_,z_]:=Length[s11[j,z]];
+t1[j_,z_]:= Testequivclassg[1,j,z,6];
+t11[j_,z_]:=Testequivclassg1[1,j,z,6];
+t2[j_,z_]:=Testequivclassg[2,j,z,6];
+t22[j_,z_]:=Testequivclassg1[2,j,z,10];
+l1[j_,z_]:=Length[t1[j,z]];
+l11[j_,z_]:=Length[t11[j,z]];
+l2[j_,z_]:=Length[t2[j,z]];
+l22[j_,z_]:=Length[t22[j,z]];
+Findsl1[m_,n_]:=Select[Select[Tuples[{cbox1[n],cboxx[m,n]}], GCD[#[[1]],#[[2]]] ==1 && Re[#[[2]]] > 0 && Im[#[[2]]]>=0 &], sl1[#[[1]],#[[2]]] ==0 &]
+Findsl11[m_,n_]:=Select[Select[Tuples[{cbox1[n],cboxx[m,n]}], GCD[#[[1]],#[[2]]] ==1 && Re[#[[2]]] > 0 && Im[#[[2]]]>=0 &], sl11[#[[1]],#[[2]]] ==0 &]
+Findl2[m_,n_]:=Select[Select[Tuples[{cbox1[n],cboxx[m,n]}], GCD[#[[1]],#[[2]]] ==1 && Re[#[[2]]] > 0 && Im[#[[2]]]>=0 &], l2[#[[1]],#[[2]]] ==0 &]
+Findl22[m_,n_]:=Select[Select[Tuples[{cbox1[n],cboxx[m,n]}], GCD[#[[1]],#[[2]]] ==1 && Re[#[[2]]] > 0 && Im[#[[2]]]>=0 &], l22[#[[1]],#[[2]]] ==0 &]
+moduli2[m_,n_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findl2[m,n]}]]
+moduli22[m_,n_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findl22[m,n]}]]
+moduli1[m_,n_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findsl1[m,n]}]]
+moduli11[m_,n_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findsl11[m,n]}]]
+
+
+modulisearch2[n_]:=Complement[cbox[n], Select[cbox[n],Length[Intersection[table2[#], m2]] >0 &]]
+modulisearch22[n_]:=Complement[modulisearch2[n], Select[cbox[n],Length[Intersection[table22[#], m22]] >0 &]]
+modulisearch1[n_]:=Complement[cbox[n], Select[cbox[n],Length[Intersection[table1[#], m1]] >0 &]]
+modulisearch[i_,n_]:=Complement[cbox[n], Select[cbox[n],Length[Intersection[tablei[i,#], m[i]]] >0 &]]
+modulisearch11[n_]:=Complement[cbox[n], Select[cbox[n],Length[Intersection[table11[#], m1]] >0 &]]
+modulisearch3[n_]:=Complement[cbox[n], Select[cbox[n],Length[Intersection[table3[#], m1]] >0 &]]
+
+
+prob[n_]:=Int[Mod[(I*#^6+(1+I)*#^3-(2I)*#^2+(2-2*I)*#+1) & /@ cbox[Abs[n]^2], n], Mod[squares[Abs[n]^2],n]]
+
+
+tablei[i_,x_]:={Mod[x,#],#} & /@ list2[m[i]]
+m[i_]:=(If[i==1,Return[m1]]; If[i==11, Return[m11]];)
+table2[x_]:={Mod[x,#],#} & /@ list2[m2]
+table22[x_]:= {Mod[x,#],#} & /@ list2[m22]
+table1[x_]:= {Mod[x,#],#} & /@ list2[m1]
+table11[x_]:= {Mod[x,#],#} & /@ list2[moduli11[1,7]]
+table3[x_]:={Mod[x,#],#} & /@ list2[m3]
+cboxnfails[i_,n_]:=Select[{#, Intersection[tablei[i,#],m[i]]}&/@ cbox1[n], Length[#[[2]]]==0 &]
+list2[list_]:=Union[Table[x[[2]], {x, list}]];
+
+
+testlistmodz[list_,z_]:={#, l22[#,z]} & /@ list
+
+
+sq2n[n_]:=Mod[cbox0[2^(n+1)]^2,2^(n+1)]
+sq2nc[n_]:=Intersection[Select[sq2n[n], Mod[#,2^n]==-1&], Select[sq2n[n], Mod[#^2,2^(n+1)]==1 &]]
+sqset[k_]:=Union[Table[z2^k-1, {z, cbox[2^k]}]] 
+sqrtset[k_]:=Flatten[Table[x-y*2^{k-1}I, {x,{-1,1}},{y,Union[Mod[cbox0[2],2]]}]]
+Int[set1_, set2_] := Intersection[set1, set2]
+Com[set1_,set2_]:=Complement[set1,set2]
+pls[n_]:=Int[sq2n[n],sqrtset[n]]
+checkers[r_]Table[{Mod[Abs[p]^2,8], clsr[{r},p]},{p,gp[10]}]
+sqrres[zz_]:=Union[Mod[cbox0[Abs[zz]^2]^2,zz]]
+clist[c_]:=Table[(c^(2^(n-1)-1))/(1+c), {n,1,5}]
+clist1[c_]:=Table[(c^(2^(n-1))+1)/(c+1), {n,1,5}]
+
+
+modre[z_]:=Union[Mod[Re[equivclass[1,z,10]],z]]
+modim[z_]:=Union[Mod[Im[equivclass[1,z,10]],z]]
+Select[gp[20], Mod[Re[#],Abs[#]^2]==-Mod[Im[#],Abs[#]^2] &]
+
+
+plsi[n_]:=Int[sq2n[n],I*sqrtset[n]]
+mod1[n_]:=Select[sq2n[n],  Mod[#,2^n]==-1&]
+
+
+tng1[ j_, z_]:={#,nfctlistg[1,#,4]} &/@ equivclass[j,z,4]
+tng2[ j_, z_]:={#, nfctlistg[2,#,4]} &/@ equivclass[j,z,4]
+
+
+SolveEllipticCurve[i_, n_]:= (If[i==0, Return[Intersection[Table[I*x^3+x^2+1, {x, cbox0[n]}], squares0[n]]]];
+If[i==1, Return[Intersection[Table[x^3-x+1, {x, cbox0[n]}], squares0[n]]]];
+If[i==2, Return[Intersection[Table[x^3+x^2+2x+1, {x, cbox0[n]}], squares0[n]]]]);
+
+
+integralptsEC[i_ ,n_]:=Flatten[Union[Table[integralptslevelkEC[i, n,k], {k, SolveEllipticCurve[i,n]}]], 2]
+integralptsHEC[HEC_,n_]:=Flatten[Union[Table[integralptslevelkHEC[HEC,k], {k, SolveHEC[HEC,n]}]], 2]
+
+
+Solve33b[n_]:=Select[Tuples[{cdisk0p[n],cdisk0p[n]}], Mod[#[[2]]^2-(#[[1]]^7+#[[1]]^6+2*#[[1]]^5+5*#[[1]]^4+6*#[[1]]^3+6*#[[1]]^2+4*#[[1]]+1),n]==0 &]
+Solve33a[n_]:=Select[Tuples[{cdisk0p[n],cdisk0p[n]}], Mod[#[[2]]^2-(#[[1]]^3+#[[1]]^2+2*#[[1]]+1),n]==0 &]
+Select[Tuples[{Range[0,2],Range[0,2]}], Mod[#[[2]]^2-(#[[1]]^7+#[[1]]^6+2*#[[1]]^5+5*#[[1]]^4+6*#[[1]]^3+6*#[[1]]^2+4*#[[1]]+1),3]==0 &]
+Select[Tuples[{cbox0[5],cbox0[5]}], #[[2]]^2-(#[[1]]^7+#[[1]]^6+2*#[[1]]^5+5*#[[1]]^4+6*#[[1]]^3+6*#[[1]]^2+4*#[[1]]+1)==0 &]
+
+
+SolveHEC[HEC_,n_]:=Intersection[Table[xx[[2]], {xx,HEC}], squares0[n]];
+SolveEC[EC_,n_]:=Intersection[Table[xx[[2]], {xx,EC}], squares0[n]];
+
+
+EC[i_, n_]:= (If[i==0, Return[Table[{x, I*x^3+x^2+1}, {x,cbox0[n]}]]]; 
+If[i==1, Return[Table[{x, x^3-x+1}, {x,cbox0[n]}]]]; 
+If[i==33, Return[Table[{x, x^3+x^2+2x+1}, {x,cbox0[n]}]]]; If[i==31, Return[Table[{x, x^3+x+1}, {x,cbox0[n]}]]]; If[i==25, Return[Table[{x,x^3-I*x^2-I}, {x,cbox0[n]}]]]);
+SQ[n_]:= Union[Table[{s,s^2}, {s, cbox0[n]}]];
+
+
+searchEC[i_, n_,value_]:= Select[EC[i,n], #[[2]]==value &];
+searchsquares[n_, value_]:= Select[SQ[n], #[[2]]==value &];
+
+
+integralptslevelkEC[i_,n_,k_]:= Table[ {searchEC[i,n, k][[l]][[1]], searchsquares[n, k][[j]][[1]]}, {l, 1, Length[searchEC[i, n, k]]},{j, 1, Length[ searchsquares[n, k] ]} ];
+integralptslevelkHEC[HEC_,k_]:= Table[ {xx[[1]], yy[[1]]}, {xx, searchHEC[HEC, k]},{yy, searchsquares[250, k]} ];
+
+
+HEC214[i_,n_]:=If[i==0, Table[{x, I*x^6+3*x^4-(1+I)x^3-(2I)*x^2-(2-2I)*x+1}, {x, cbox0[n]}], If[i==1, Table[{x,8*x^6-12*x^4-4*x^3+4*x^2+4*x+1}, {x, cbox0[n]}]]]
+HEC33[n_]:= Table[{x,x^7+x^6+2x^5+5x^4+6x^3+6x^2+4x+1}, {x, cbox0[n]}];
+
+
+c1[point_]:={8#1^6+12#1^4-4*I*#1^3+4#1^2-4*I*#1+1, #2^2} & @@ point
+c2m[point_]:={I*#1^6+3#^4-(1+I)#1^3-2*I*#1^2-(2-2*I)#1+1, #2^2} & @@ point
+c2p[point_]:={I*#1^6+3#^4+(1+I)#1^3-2*I*#1^2+(2-2*I)#1+1, #2^2} & @@ point
+c3[point_]:={-I*#1^6+3#1^4+(1-I)#1^3+2*I*#1^2+(2+2*I)#1+1, #2^2} & @@ point
+c0[point_]:={8#1^6-12#1^4-4#1^3+4#1^2+4#1+1, #2^2} & @@ point
+searchHEC[HEC_, value_]:= Select[HEC, #[[2]]==value &];
+
+
+irredbutsqg[i_, n_, step_]:=(S=Select[cbox[n], nfctg[i,#,step] ==1 &];
+Select[S, issq[wn[i,#,step]]==True &])
+
+
+p[zz_]:=(Clear[zz]; If[PrimeQ[z, GaussianIntegers->True], True, FactorInteger[zz, GaussianIntegers->True]];)
+
+
+
+inbox[list_, n_] := Intersection[list, cbox0[n]];
+dataset0={}; dataset1={}; dataset2={};
+dataset[t_]:=If[t==0, dataset0, If[t==1, dataset1, If[t==2, dataset2]]]
+candidates[t_,m_,mm_, k_]:=(pt=Gprimes[100];
+For[i=m,i<=mm, i++, DRandSQ[pt[[i]]]; Print[pt[[i]]]; For[j=2, j<=Length[DR], j++, DRGP2=clsr[wnmodz[t,DR[[j]], 20, pt[[i]] ], pt[[i]]]; 
+If[ Union[DRGP2[[k;;20]]]=={0}, AppendTo[dataset[t],{DR[[j]],pt[[i]]} ] ] ] ] ; dataset[t]);
+
+
+wjnz[i_, n_, z_]:=(reps=Complement[Union[Mod[cbox[n], z]], {0}]; Clear[m]; M=Table[{m, z, clsr[wnmodz[i,m,20,z],z]},{m, reps}]; Select[M, SubsetQ[3*Range[10]-1,Flatten[Position[#[[3]], True]]] &]);
+
+
+wjnz1[j_, n_, z_]:=(reps=Complement[Union[Mod[cbox[n], z]], {0}]; Clear[m]; M=Table[{m, z, clsr[wnmodz[i,m,20,z],z]},{m, reps}]; Select[M, SubsetQ[Union[3*Range[10]-1, 2*Range[10]-1],Flatten[Position[#[[3]], True]]] &]);
+
+
+w1[n_]:= wjnz[1,n,#]& /@ gp[n]
+w11[n_]:=wjnz1[1,n,#]& /@ gp[n]
+w2[n_]:= wjnz[2,n,#]& /@ gp[n]
+w22[n_]:=wjnz1[2,n,#]& /@ gp[n]
+
+
+anz[n_, z_]:=(reps=Complement[Union[Mod[cc[n], z]], {0}]; Clear[nn]; M=Table[{nn, z, clsr[anmodz[nn,20,z],z]},{nn, reps}]; Select[M, SubsetQ[3*Range[10],Flatten[Position[#[[3]], True]]] &]);
+
+
+anzfff[n_, z_]:=(reps=Complement[Union[Mod[cc[n], z]], {0}]; Clear[nn]; M=Table[{nn, z, clsr[anmodz[nn,20,z],z]},{nn, reps}]; Select[M, SubsetQ[3*Range[10],Flatten[Position[#[[3]], True]]] &]);
+
+
+cc[n_]:=nobad[Select[cbox0[n], issq[#+1]==False &]]
+nobad[list_]:=Complement[list, bad]
+de[list_,rem_]:=Complement[list,rem]
+
+
+gp[n_]:=Select[Gprimes[n], Re[#] > Im[#] &]
+
+
+fpc[c_]:=(z=gp[100][[1]]; i=1; Clear[M]; M=clsr[wnmodz[1,20,z],z];
+While[
+SubsetQ[3*Range[10],Flatten[Position[M, True]]]==False, 
+i+=1; 
+z=gp[100][[i]]; 
+M=clsr[wnmodz[1,c,z],z]
+]; print[z])
+
+
+fpc1[c_]:=(z=gp[100][[1]]; i=1; Clear[M]; M=clsr[wnmodz[1,20,z],z];
+While[
+SubsetQ[2*Range[10]-1,Flatten[Position[M, True]]]==False, 
+i+=1; 
+z=gp[100][[i]]; 
+M=clsr[wnmodz[1,c,z],z]
+]; print[z])
+
+
+no0[list_]:=Complement[list,{0}]
+
+
+weirdset:={-10 - 5 I, -10 + 5 I, -9 - 6 I, -9 + 6 I, -6 - 3 I, -6 + 3 I, -6 - 9 I, -6 + 9 I, -5 - 10 I, -5 + 10 I, -3 - 6 I, -3 + 6 I, 3 - 6 I, 3 + 6 I, 5 - 10 I, 5 + 10 I, 6 - 3 I, 6 + 3 I, 6 - 9 I, 6 + 9 I, 9 - 6 I, 9 + 6 I, 10 - 5 I, 10 + 5 I}
+
+
+Findcycle[list_]:=(Clear[i,j,k]; pairs={}; 
+For[i=1, i<= Length[list], i++, For[j=1, j<= Length[list], j++, If[i<j && list[[i]]==list[[j]], AppendTo[pairs, {i,j}]]]]; For[k=1, k<=Length[pairs], k++, k1= pairs[[k]][[1]]; k2=pairs[[k]][[2]]; If[2*k2-k1<=Length[list], If[list[[k1;;k2]]==list[[k2;;2*k2-k1]], Return[list[[k1;;k2]] ]]]]);
+
+
+{#[[1]], #[[2]], 2*#[[2]]-#[[1]]}& /@ pairs
+list2[list_]:=Union[Table[x[[2]], {x, list}]];
+
+
+Table[Mod[I(1+I)*x*y+I, 2+2I], {x,{1,-1,I,-I}},{y,Mod[cbox[3],2+2I]}]
+Union[modtup /@ Select[Tuples[{cbox0[20],gp[20]}], EvenQ[Im[#[[2]]]] && Union[Mod[anrec[#[[1]],10][[Range[3,9,2]]]-(1+I),#[[2]]]]=={0} &]]
+
+
+floorz[z_]:=Floor[Abs[z]]
+sqrtmodz[ccc_,zzz_]:= (Sqrtset:=Mod[cdisk0[floorz[zzz]], zzz]; Sqrset:=Mod[Sqrtset^2,zzz]; cccmod:= Mod[ccc,zzz]; If[MemberQ[Sqrset,cccmod]==True, Union[Extract[Sqrtset, Position[Mod[Sqrtset^2, zzz], cccmod]]]])
+
+
+m2:={{-6, 6 + 7 I}, {-6, 7 + 6 I}, {-5, 6 + 6 I}, {-5 - I, 6 + 7 I}, {-4, 6 + 7 I}, {-4, 7 + 4 I}, {-4 - I, 3 + 6 I}, {-3, 2 + 6 I}, {-3, 4 + 4 I}, {-3, 4 + 5 I}, {-3, 4 + 6 I}, {-3, 5 + 4 I}, {-3, 6 + 2 I}, {-3, 6 + 4 I}, {-3 - I, 7 + 2 I}, {-3 + I, 3 + 6 I}, {-3 + I, 6 + I}, {-3 - 2 I, 2 + 6 I}, {-3 - 2 I, 2 + 7 I}, {-3 - 2 I, 4 + 6 I}, {-3 - 2 I, 6}, {-3 - 2 I, 6 + 6 I}, {-3 + 2 I, 1 + 7 I}, {-3 + 2 I, 6}, {-3 + 2 I, 6 + 2 I}, {-3 + 2 I, 6 + 4 I}, {-3 + 2 I, 6 + 6 I}, {-3 + 2 I, 6 + 7 I}, {-3 + 2 I, 7 + 5 I}, {-3 - 3 I, 6 + 7 I}, {-3 + 3 I, 6 + 7 I}, {-2, 3 + 6 I}, {-2, 6 + 3 I}, {-2, 6 + 7 I}, {-2 - I, 1 + 4 I}, {-2 - I, 1 + 7 I}, {-2 - I, 2 + 4 I}, {-2 - I, 5 + 3 I}, {-2 - I, 6 + 2 I}, {-2 - I, 6 + 7 I}, {-2 - I, 7 + 4 I}, {-2 + I, 3 + 5 I}, {-2 + I, 4}, {-2 + I, 4 + 4 I}, {-2 - 2 I, 2 + 5 I}, {-2 - 2 I, 3 + 6 I}, {-2 + 2 I, 5}, {-2 - 3 I, 6}, {-2 - 3 I, 6 + 3 I}, {-2 - 3 I, 6 + 5 I}, {-2 - 3 I, 6 + 6 I}, {-2 - 3 I, 7 + I}, {-2 - 3 I, 7 + 6 I}, {-2 + 3 I, 3 + 6 I}, {-2 + 3 I, 6}, {-2 + 3 I, 6 + 6 I}, {-2 + 3 I, 6 + 7 I}, {-2 + 4 I, 6 + 7 I}, {-1, 2}, {-1, 2 + I}, {-1, 2 + 2 I}, {-1, 2 + 4 I}, {-1, 2 + 6 I}, {-1, 3}, {-1, 3 + 3 I}, {-1, 3 + 4 I}, {-1, 3 + 6 I}, {-1, 4}, {-1, 4 + 2 I}, {-1, 4 + 3 I}, {-1, 4 + 4 I}, {-1, 4 + 6 I}, {-1, 5}, {-1, 5 + 5 I}, {-1, 6}, {-1, 6 + 2 I}, {-1, 6 + 3 I}, {-1, 6 + 4 I}, {-1, 6 + 6 I}, {-1, 6 + 7 I}, {-1, 7 + I}, {-1, 7 + 6 I}, {-1 + I, 5}, {-1 + I, 6 + 7 I}, {-1 + I, 7 + 4 I}, {-1 - 2 I, 2 + 6 I}, {-1 - 2 I, 3 + 7 I}, {-1 - 2 I, 4}, {-1 - 2 I, 4 + 2 I}, {-1 - 2 I, 4 + 4 I}, {-1 - 2 I, 4 + 6 I}, {-1 - 2 I, 6}, {-1 - 2 I, 6 + 4 I}, {-1 - 2 I, 6 + 6 I}, {-1 - 2 I, 7}, {-1 + 2 I, 2 + 4 I}, {-1 + 2 I, 2 + 5 I}, {-1 + 2 I, 4}, {-1 + 2 I, 4 + 4 I}, {-1 + 2 I, 4 + 6 I}, {-1 + 2 I, 6}, {-1 + 2 I, 6 + 2 I}, {-1 + 2 I, 6 + 4 I}, {-1 + 2 I, 6 + 6 I}, {-1 + 2 I, 7 + 3 I}, {-1 + 2 I, 7 + 4 I}, {-1 + 2 I, 7 + 7 I}, {-1 - 3 I, 3 + 6 I}, {-1 - 3 I, 4 + 5 I}, {-1 + 3 I, 5 + 4 I}, {-1 + 3 I, 6 + 3 I}, {-1 - 4 I, 6 + 4 I}, {-1 - 4 I, 6 + 6 I}, {-1 - 4 I, 7 + 4 I}, {-1 + 4 I, 4 + 6 I}, {-1 + 4 I, 4 + 7 I}, {-1 + 4 I, 6 + 6 I}, {-2 I, 3 + 4 I}, {-2 I, 6 + 7 I}, {-2 I, 7 + 4 I}, {2 I, 3 + 6 I}, {-3 I, 3 + 7 I}, {-3 I, 4 + 4 I}, {3 I, 1 + 7 I}, {3 I, 2 + 6 I}, {3 I, 3 + 4 I}, {3 I, 6 + 2 I}, {3 I, 6 + 7 I}, {3 I, 7 + I}, {3 I, 7 + 3 I}, {3 I, 7 + 4 I}, {4 I, 6 + 7 I}, {-6 I, 6 + 7 I}, {1, 1 + 2 I}, {1, 1 + 3 I}, {1, 1 + 7 I}, {1, 2}, {1, 2 + 2 I}, {1, 2 + 4 I}, {1, 2 + 6 I}, {1, 3}, {1, 3 + I}, {1, 3 + 3 I}, {1, 3 + 6 I}, {1, 4}, {1, 4 + 2 I}, {1, 4 + 4 I}, {1, 4 + 6 I}, {1, 5}, {1, 5 + 5 I}, {1, 6}, {1, 6 + 2 I}, {1, 6 + 3 I}, {1, 6 + 4 I}, {1, 6 + 6 I}, {1, 6 + 7 I}, {1, 7 + 4 I}, {1, 7 + 6 I}, {1 - I, 3 + 6 I}, {1 + I, 3 + 4 I}, {1 + I, 5}, {1 - 2 I, 2 + 4 I}, {1 - 2 I, 4}, {1 - 2 I, 4 + 4 I}, {1 - 2 I, 4 + 6 I}, {1 - 2 I, 6}, {1 - 2 I, 6 + 2 I}, {1 - 2 I, 6 + 4 I}, {1 - 2 I, 6 + 6 I}, {1 - 2 I, 7}, {1 + 2 I, 2 + 6 I}, {1 + 2 I, 4}, {1 + 2 I, 4 + 2 I}, {1 + 2 I, 4 + 4 I}, {1 + 2 I, 4 + 6 I}, {1 + 2 I, 5 + 2 I}, {1 + 2 I, 6}, {1 + 2 I, 6 + 4 I}, {1 + 2 I, 6 + 6 I}, {1 + 2 I, 7 + 7 I}, {1 - 3 I, 5 + 4 I}, {1 - 3 I, 6 + 3 I}, {1 + 3 I, 3 + 6 I}, {1 + 3 I, 4 + 5 I}, {1 - 4 I, 4 + 6 I}, {1 - 4 I, 4 + 7 I}, {1 - 4 I, 6 + 6 I}, {1 - 4 I, 6 + 7 I}, {1 + 4 I, 6 + 4 I}, {1 + 4 I, 6 + 6 I}, {1 + 4 I, 7 + 4 I}, {1 - 5 I, 6 + 7 I}, {1 + 5 I, 6 + 7 I}, {1 + 5 I, 7 + 4 I}, {2, 3}, {2, 3 + 6 I}, {2, 6 + 3 I}, {2 - I, 2 + 6 I}, {2 - I, 3 + 4 I}, {2 - I, 4 + I}, {2 - I, 4 + 2 I}, {2 - I, 7 + I}, {2 + I, 3 + 6 I}, {2 + I, 4}, {2 + I, 4 + 3 I}, {2 + I, 4 + 4 I}, {2 - 2 I, 5 + 2 I}, {2 - 2 I, 6 + 7 I}, {2 - 2 I, 7 + 4 I}, {2 + 2 I, 5}, {2 + 2 I, 6 + 7 I}, {2 + 2 I, 7 + 4 I}, {2 - 3 I, 1 + 7 I}, {2 - 3 I, 3 + 6 I}, {2 - 3 I, 5 + 6 I}, {2 - 3 I, 6}, {2 - 3 I, 6 + 6 I}, {2 - 3 I, 6 + 7 I}, {2 - 3 I, 7 + 4 I}, {2 + 3 I, 6}, {2 + 3 I, 6 + 3 I}, {2 + 3 I, 6 + 6 I}, {2 + 3 I, 7 + 6 I}, {3, 2 + 6 I}, {3, 4}, {3, 4 + 4 I}, {3, 4 + 5 I}, {3, 4 + 6 I}, {3, 5 + 4 I}, {3, 6 + 2 I}, {3, 6 + 4 I}, {3 - I, 2 + 7 I}, {3 - I, 6 + 7 I}, {3 - I, 7 + 4 I}, {3 + I, 1 + 6 I}, {3 - 2 I, 6}, {3 - 2 I, 6 + 2 I}, {3 - 2 I, 6 + 4 I}, {3 - 2 I, 6 + 6 I}, {3 - 2 I, 7 + 2 I}, {3 + 2 I, 2 + 6 I}, {3 + 2 I, 4 + 6 I}, {3 + 2 I, 6}, {3 + 2 I, 6 + 6 I}, {3 + 2 I, 6 + 7 I}, {3 + 2 I, 7 + I}, {4, 5}, {4 + I, 6 + 7 I}, {4 + I, 7 + 4 I}, {5, 6}, {5, 6 + 6 I}, {6, 6 + 7 I}, {6, 7 + 6 I}}
+
+
+m22:= {{-5 + I, 6 + 7 I}, {-5 + I, 7 + 6 I}, {-4 - I, 6 + 7 I}, {-4 - I, 7 + 7 I}, {-4 + I, 6 + 4 I}, {-4 + I, 7 + 6 I}, {-4 + I, 7 + 7 I}, {-3, 5 + 6 I}, {-3, 7}, {-3, 7 + 7 I}, {-3 - I, 7}, {-3 + I, 5 + 2 I}, {-3 + I, 7}, {-3 - 2 I, 7}, {-3 + 2 I, 2 + 7 I}, {-3 + 2 I, 7 + 7 I}, {-3 - 3 I, 7}, {-3 - 3 I, 7 + 6 I}, {-3 + 3 I, 7 + 6 I}, {-2, 1 + 4 I}, {-2, 2 + 7 I}, {-2, 3 + 2 I}, {-2, 4 + I}, {-2, 7 + 2 I}, {-2, 7 + 6 I}, {-2 - I, 3 + 5 I}, {-2 - I, 4}, {-2 - I, 4 + 4 I}, {-2 + I, 1 + 6 I}, {-2 + I, 5 + 3 I}, {-2 + I, 5 + 4 I}, {-2 + I, 7 + 5 I}, {-2 - 2 I, 2 + 7 I}, {-2 + 2 I, 5 + 2 I}, {-2 + 2 I, 5 + 6 I}, {-2 - 3 I, 2 + 7 I}, {-2 - 3 I, 3 + 7 I}, {-2 - 3 I, 5 + 6 I}, {-2 + 3 I, 6 + 5 I}, {-2 + 3 I, 7 + 3 I}, {-1, 1 + 4 I}, {-1, 1 + 5 I}, {-1, 1 + 6 I}, {-1, 2 + 3 I}, {-1, 3 + 5 I}, {-1, 4 + 7 I}, {-1, 5 + I}, {-1, 5 + 3 I}, {-1, 5 + 7 I}, {-1, 6 + I}, {-1, 7}, {-1, 7 + 4 I}, {-1, 7 + 5 I}, {-1, 7 + 7 I}, {-1 - I, 4 + 7 I}, {-1 + I, 6 + 5 I}, {-1 - 2 I, 1 + 5 I}, {-1 - 2 I, 4 + I}, {-1 - 2 I, 5 + 2 I}, {-1 - 2 I, 5 + 3 I}, {-1 + 2 I, 3 + 5 I}, {-1 + 2 I, 5 + I}, {-1 + 2 I, 5 + 2 I}, {-1 + 2 I, 5 + 4 I}, {-1 - 4 I, 7 + 6 I}, {-1 + 4 I, 6 + 7 I}, {-1 - 5 I, 7 + 6 I}, {-1 + 5 I, 6 + 7 I}, {-2 I, 1 + 4 I}, {-2 I, 4 + I}, {-2 I, 5 + 6 I}, {-2 I, 6 + 5 I}, {-2 I, 7 + 6 I}, {2 I, 1 + 4 I}, {2 I, 4 + I}, {2 I, 6 + 7 I}, {2 I, 7 + 6 I}, {-3 I, 4 + 5 I}, {-3 I, 4 + 6 I}, {-3 I, 4 + 7 I}, {-3 I, 5 + 4 I}, {-3 I, 5 + 6 I}, {-3 I, 6 + 4 I}, {-3 I, 6 + 5 I}, {-3 I, 7 + 3 I}, {-3 I, 7 + 4 I}, {3 I, 3 + 7 I}, {3 I, 4 + 4 I}, {3 I, 4 + 5 I}, {3 I, 4 + 7 I}, {3 I, 5 + 4 I}, {-4 I, 5 + 4 I}, {1, 1 + 6 I}, {1, 3 + 2 I}, {1, 4 + I}, {1, 4 + 7 I}, {1, 5 + 7 I}, {1, 6 + I}, {1, 7}, {1, 7 + 5 I}, {1, 7 + 7 I}, {1 - I, 7 + 4 I}, {1 + I, 4 + 7 I}, {1 + I, 5 + 6 I}, {1 - 2 I, 1 + 4 I}, {1 - 2 I, 2 + 5 I}, {1 - 2 I, 3 + 5 I}, {1 - 2 I, 3 + 7 I}, {1 - 2 I, 5 + 3 I}, {1 - 2 I, 6 + 7 I}, {1 - 2 I, 7 + 3 I}, {1 + 2 I, 2 + 5 I}, {1 + 2 I, 3 + 5 I}, {1 + 2 I, 3 + 7 I}, {1 + 2 I, 5 + 3 I}, {1 + 2 I, 7 + 3 I}, {1 + 3 I, 7 + 4 I}, {1 + 4 I, 7 + 6 I}, {1 + 5 I, 7 + 6 I}, {2, 1 + 4 I}, {2, 2 + 3 I}, {2, 2 + 7 I}, {2, 4 + I}, {2, 6 + 7 I}, {2, 7 + 2 I}, {2, 7 + 4 I}, {2, 7 + 6 I}, {2 - I, 4}, {2 - I, 4 + 4 I}, {2 - I, 5 + 3 I}, {2 + I, 3 + 5 I}, {2 + I, 4 + 5 I}, {2 + I, 6 + I}, {2 - 2 I, 7 + 2 I}, {2 + 2 I, 2 + 5 I}, {2 + 2 I, 6 + 5 I}, {2 - 3 I, 6 + 5 I}, {2 - 3 I, 7 + 2 I}, {2 + 3 I, 5 + 6 I}, {3, 6 + 5 I}, {3, 7}, {3, 7 + 7 I}, {3 - I, 7}, {3 + I, 2 + 5 I}, {3 + I, 7}, {3 - 2 I, 7}, {3 + 2 I, 7 + 2 I}, {3 + 2 I, 7 + 7 I}, {3 - 3 I, 6 + 7 I}, {3 - 3 I, 7}, {3 - 3 I, 7 + 6 I}, {3 + 3 I, 6 + 7 I}, {3 + 3 I, 7 + 6 I}, {3 - 4 I, 7 + 7 I}, {4, 7}, {4 - I, 7 + 6 I}, {4 - I, 7 + 7 I}, {4 + I, 4 + 6 I}, {4 + I, 7 + 7 I}, {4 + 3 I, 7 + 7 I}, {5 - I, 7 + 6 I}, {5 + I, 6 + 7 I}, {6, 7}}
+
+
+
+m1:= {{-4, 4 + 5 I}, {-4, 5 + 4 I}, {-4 - I, 5 + 5 I}, {-4 + I, 5 + 5 I}, {-3, 3 + 4 I}, {-3, 3 + 5 I}, {-3, 4 + 3 I}, {-3, 4 + 4 I}, {-3, 4 + 5 I}, {-3, 5 + 3 I}, {-3, 5 + 4 I}, {-3, 5 + 5 I}, {-3 - I, 2 + 5 I}, {-3 - I, 4 + 5 I}, {-3 - I, 5 + 4 I}, {-3 + I, 4 + 5 I}, {-3 + I, 5 + 2 I}, {-3 + I, 5 + 4 I}, {-3 - 2 I, 5 + 5 I}, {-3 + 2 I, 5 + 5 I}, {-2, 1 + 4 I}, {-2, 2 + 3 I}, {-2, 2 + 5 I}, {-2, 3 + 2 I}, {-2, 3 + 4 I}, {-2, 4 + I}, {-2, 4 + 3 I}, {-2, 4 + 5 I}, {-2, 5}, {-2, 5 + 2 I}, {-2, 5 + 4 I}, {-2 - I, 1 + 4 I}, {-2 - I, 1 + 5 I}, {-2 - I, 2 + 4 I}, {-2 - I, 2 + 5 I}, {-2 - I, 3 + 3 I}, {-2 - I, 3 + 5 I}, {-2 - I, 4}, {-2 - I, 4 + 3 I}, {-2 - I, 4 + 4 I}, {-2 - I, 4 + 5 I}, {-2 - I, 5 + I}, {-2 - I, 5 + 2 I}, {-2 - I, 5 + 3 I}, {-2 - I, 5 + 4 I}, {-2 + I, 1 + 5 I}, {-2 + I, 2 + 5 I}, {-2 + I, 3 + 3 I}, {-2 + I, 3 + 4 I}, {-2 + I, 3 + 5 I}, {-2 + I, 4}, {-2 + I, 4 + I}, {-2 + I, 4 + 2 I}, {-2 + I, 4 + 4 I}, {-2 + I, 4 + 5 I}, {-2 + I, 5 + I}, {-2 + I, 5 + 2 I}, {-2 + I, 5 + 3 I}, {-2 + I, 5 + 4 I}, {-2 - 2 I, 2 + 5 I}, {-2 - 2 I, 4 + 5 I}, {-2 - 2 I, 5}, {-2 - 2 I, 5 + 2 I}, {-2 - 2 I, 5 + 4 I}, {-2 + 2 I, 2 + 5 I}, {-2 + 2 I, 4 + 5 I}, {-2 + 2 I, 5}, {-2 + 2 I, 5 + 2 I}, {-2 + 2 I, 5 + 4 I}, {-2 - 3 I, 5 + 5 I}, {-2 + 3 I, 5 + 5 I}, {-1, 1 + 2 I}, {-1, 1 + 3 I}, {-1, 1 + 4 I}, {-1, 1 + 5 I}, {-1, 2}, {-1, 2 + I}, {-1, 2 + 2 I}, {-1, 2 + 3 I}, {-1, 2 + 4 I}, {-1, 2 + 5 I}, {-1, 3}, {-1, 3 + I}, {-1, 3 + 2 I}, {-1, 3 + 3 I}, {-1, 3 + 4 I}, {-1, 3 + 5 I}, {-1, 4}, {-1, 4 + I}, {-1, 4 + 2 I}, {-1, 4 + 3 I}, {-1, 4 + 4 I}, {-1, 4 + 5 I}, {-1, 5}, {-1, 5 + I}, {-1, 5 + 2 I}, {-1, 5 + 3 I}, {-1, 5 + 4 I}, {-1, 5 + 5 I}, {-1 - I, 1 + 4 I}, {-1 - I, 2 + 3 I}, {-1 - I, 2 + 5 I}, {-1 - I, 3}, {-1 - I, 3 + 2 I}, {-1 - I, 3 + 4 I}, {-1 - I, 4 + I}, {-1 - I, 4 + 3 I}, {-1 - I, 4 + 5 I}, {-1 - I, 5}, {-1 - I, 5 + 2 I}, {-1 - I, 5 + 4 I}, {-1 + I, 1 + 4 I}, {-1 + I, 2 + 3 I}, {-1 + I, 2 + 5 I}, {-1 + I, 3}, {-1 + I, 3 + 2 I}, {-1 + I, 3 + 4 I}, {-1 + I, 4 + I}, {-1 + I, 4 + 3 I}, {-1 + I, 4 + 5 I}, {-1 + I, 5}, {-1 + I, 5 + 2 I}, {-1 + I, 5 + 4 I}, {-1 - 2 I, 1 + 5 I}, {-1 - 2 I, 2 + 5 I}, {-1 - 2 I, 3 + 3 I}, {-1 - 2 I, 3 + 4 I}, {-1 - 2 I, 3 + 5 I}, {-1 - 2 I, 4}, {-1 - 2 I, 4 + I}, {-1 - 2 I, 4 + 2 I}, {-1 - 2 I, 4 + 4 I}, {-1 - 2 I, 4 + 5 I}, {-1 - 2 I, 5 + I}, {-1 - 2 I, 5 + 2 I}, {-1 - 2 I, 5 + 3 I}, {-1 - 2 I, 5 + 4 I}, {-1 + 2 I, 1 + 4 I}, {-1 + 2 I, 1 + 5 I}, {-1 + 2 I, 2 + 4 I}, {-1 + 2 I, 2 + 5 I}, {-1 + 2 I, 3 + 3 I}, {-1 + 2 I, 3 + 5 I}, {-1 + 2 I, 4}, {-1 + 2 I, 4 + 3 I}, {-1 + 2 I, 4 + 4 I}, {-1 + 2 I, 4 + 5 I}, {-1 + 2 I, 5 + I}, {-1 + 2 I, 5 + 2 I}, {-1 + 2 I, 5 + 3 I}, {-1 + 2 I, 5 + 4 I}, {-1 - 3 I, 4 + 5 I}, {-1 - 3 I, 5 + 2 I}, {-1 - 3 I, 5 + 4 I}, {-1 + 3 I, 2 + 5 I}, {-1 + 3 I, 4 + 5 I}, {-1 + 3 I, 5 + 4 I}, {-1 - 4 I, 5 + 5 I}, {-1 + 4 I, 5 + 5 I}, {-I, 1 + 2 I}, {-I, 1 + 3 I}, {-I, 1 + 4 I}, {-I, 1 + 5 I}, {-I, 2}, {-I, 2 + I}, {-I, 2 + 2 I}, {-I, 2 + 3 I}, {-I, 2 + 4 I}, {-I, 2 + 5 I}, {-I, 3}, {-I, 3 + I}, {-I, 3 + 2 I}, {-I, 3 + 3 I}, {-I, 3 + 4 I}, {-I, 3 + 5 I}, {-I, 4}, {-I, 4 + I}, {-I, 4 + 2 I}, {-I, 4 + 3 I}, {-I, 4 + 4 I}, {-I, 4 + 5 I}, {-I, 5}, {-I, 5 + I}, {-I, 5 + 2 I}, {-I, 5 + 3 I}, {-I, 5 + 4 I}, {-I, 5 + 5 I}, {I, 1 + 2 I}, {I, 1 + 3 I}, {I, 1 + 4 I}, {I, 1 + 5 I}, {I, 2}, {I, 2 + I}, {I, 2 + 2 I}, {I, 2 + 3 I}, {I, 2 + 4 I}, {I, 2 + 5 I}, {I, 3}, {I, 3 + I}, {I, 3 + 2 I}, {I, 3 + 3 I}, {I, 3 + 4 I}, {I, 3 + 5 I}, {I, 4}, {I, 4 + I}, {I, 4 + 2 I}, {I, 4 + 3 I}, {I, 4 + 4 I}, {I, 4 + 5 I}, {I, 5}, {I, 5 + I}, {I, 5 + 2 I}, {I, 5 + 3 I}, {I, 5 + 4 I}, {I, 5 + 5 I}, {-2 I, 1 + 4 I}, {-2 I, 2 + 3 I}, {-2 I, 2 + 5 I}, {-2 I, 3 + 2 I}, {-2 I, 3 + 4 I}, {-2 I, 4 + I}, {-2 I, 4 + 3 I}, {-2 I, 4 + 5 I}, {-2 I, 5}, {-2 I, 5 + 2 I}, {-2 I, 5 + 4 I}, {2 I, 1 + 4 I}, {2 I, 2 + 3 I}, {2 I, 2 + 5 I}, {2 I, 3 + 2 I}, {2 I, 3 + 4 I}, {2 I, 4 + I}, {2 I, 4 + 3 I}, {2 I, 4 + 5 I}, {2 I, 5}, {2 I, 5 + 2 I}, {2 I, 5 + 4 I}, {-3 I, 3 + 4 I}, {-3 I, 3 + 5 I}, {-3 I, 4 + 3 I}, {-3 I, 4 + 4 I}, {-3 I, 4 + 5 I}, {-3 I, 5 + 3 I}, {-3 I, 5 + 4 I}, {-3 I, 5 + 5 I}, {3 I, 3 + 4 I}, {3 I, 3 + 5 I}, {3 I, 4 + 3 I}, {3 I, 4 + 4 I}, {3 I, 4 + 5 I}, {3 I, 5 + 3 I}, {3 I, 5 + 4 I}, {3 I, 5 + 5 I}, {-4 I, 4 + 5 I}, {-4 I, 5 + 4 I}, {4 I, 4 + 5 I}, {4 I, 5 + 4 I}, {1, 1 + 2 I}, {1, 1 + 3 I}, {1, 1 + 4 I}, {1, 1 + 5 I}, {1, 2}, {1, 2 + I}, {1, 2 + 2 I}, {1, 2 + 3 I}, {1, 2 + 4 I}, {1, 2 + 5 I}, {1, 3}, {1, 3 + I}, {1, 3 + 2 I}, {1, 3 + 3 I}, {1, 3 + 4 I}, {1, 3 + 5 I}, {1, 4}, {1, 4 + I}, {1, 4 + 2 I}, {1, 4 + 3 I}, {1, 4 + 4 I}, {1, 4 + 5 I}, {1, 5}, {1, 5 + I}, {1, 5 + 2 I}, {1, 5 + 3 I}, {1, 5 + 4 I}, {1, 5 + 5 I}, {1 - I, 1 + 4 I}, {1 - I, 2 + 3 I}, {1 - I, 2 + 5 I}, {1 - I, 3}, {1 - I, 3 + 2 I}, {1 - I, 3 + 4 I}, {1 - I, 4 + I}, {1 - I, 4 + 3 I}, {1 - I, 4 + 5 I}, {1 - I, 5}, {1 - I, 5 + 2 I}, {1 - I, 5 + 4 I}, {1 + I, 1 + 4 I}, {1 + I, 2 + 3 I}, {1 + I, 2 + 5 I}, {1 + I, 3}, {1 + I, 3 + 2 I}, {1 + I, 3 + 4 I}, {1 + I, 4 + I}, {1 + I, 4 + 3 I}, {1 + I, 4 + 5 I}, {1 + I, 5}, {1 + I, 5 + 2 I}, {1 + I, 5 + 4 I}, {1 - 2 I, 1 + 4 I}, {1 - 2 I, 1 + 5 I}, {1 - 2 I, 2 + 4 I}, {1 - 2 I, 2 + 5 I}, {1 - 2 I, 3 + 3 I}, {1 - 2 I, 3 + 5 I}, {1 - 2 I, 4}, {1 - 2 I, 4 + 3 I}, {1 - 2 I, 4 + 4 I}, {1 - 2 I, 4 + 5 I}, {1 - 2 I, 5 + I}, {1 - 2 I, 5 + 2 I}, {1 - 2 I, 5 + 3 I}, {1 - 2 I, 5 + 4 I}, {1 + 2 I, 1 + 5 I}, {1 + 2 I, 2 + 5 I}, {1 + 2 I, 3 + 3 I}, {1 + 2 I, 3 + 4 I}, {1 + 2 I, 3 + 5 I}, {1 + 2 I, 4}, {1 + 2 I, 4 + I}, {1 + 2 I, 4 + 2 I}, {1 + 2 I, 4 + 4 I}, {1 + 2 I, 4 + 5 I}, {1 + 2 I, 5 + I}, {1 + 2 I, 5 + 2 I}, {1 + 2 I, 5 + 3 I}, {1 + 2 I, 5 + 4 I}, {1 - 3 I, 2 + 5 I}, {1 - 3 I, 4 + 5 I}, {1 - 3 I, 5 + 4 I}, {1 + 3 I, 4 + 5 I}, {1 + 3 I, 5 + 2 I}, {1 + 3 I, 5 + 4 I}, {1 - 4 I, 5 + 5 I}, {1 + 4 I, 5 + 5 I}, {2, 1 + 4 I}, {2, 2 + 3 I}, {2, 2 + 5 I}, {2, 3}, {2, 3 + 2 I}, {2, 3 + 4 I}, {2, 4 + I}, {2, 4 + 3 I}, {2, 4 + 5 I}, {2, 5}, {2, 5 + 2 I}, {2, 5 + 4 I}, {2 - I, 1 + 5 I}, {2 - I, 2 + 5 I}, {2 - I, 3 + 3 I}, {2 - I, 3 + 4 I}, {2 - I, 3 + 5 I}, {2 - I, 4}, {2 - I, 4 + I}, {2 - I, 4 + 2 I}, {2 - I, 4 + 4 I}, {2 - I, 4 + 5 I}, {2 - I, 5 + I}, {2 - I, 5 + 2 I}, {2 - I, 5 + 3 I}, {2 - I, 5 + 4 I}, {2 + I, 1 + 4 I}, {2 + I, 1 + 5 I}, {2 + I, 2 + 4 I}, {2 + I, 2 + 5 I}, {2 + I, 3 + 3 I}, {2 + I, 3 + 5 I}, {2 + I, 4}, {2 + I, 4 + 3 I}, {2 + I, 4 + 4 I}, {2 + I, 4 + 5 I}, {2 + I, 5 + I}, {2 + I, 5 + 2 I}, {2 + I, 5 + 3 I}, {2 + I, 5 + 4 I}, {2 - 2 I, 2 + 5 I}, {2 - 2 I, 4 + 5 I}, {2 - 2 I, 5}, {2 - 2 I, 5 + 2 I}, {2 - 2 I, 5 + 4 I}, {2 + 2 I, 2 + 5 I}, {2 + 2 I, 4 + 5 I}, {2 + 2 I, 5}, {2 + 2 I, 5 + 2 I}, {2 + 2 I, 5 + 4 I}, {2 - 3 I, 5 + 5 I}, {2 + 3 I, 5 + 5 I}, {3, 3 + 4 I}, {3, 3 + 5 I}, {3, 4}, {3, 4 + 3 I}, {3, 4 + 4 I}, {3, 4 + 5 I}, {3, 5}, {3, 5 + 3 I}, {3, 5 + 4 I}, {3, 5 + 5 I}, {3 - I, 4 + 5 I}, {3 - I, 5 + 2 I}, {3 - I, 5 + 4 I}, {3 + I, 2 + 5 I}, {3 + I, 4 + 5 I}, {3 + I, 5 + 4 I}, {3 - 2 I, 5 + 5 I}, {3 + 2 I, 5 + 5 I}, {4, 4 + 5 I}, {4, 5}, {4, 5 + 4 I}, {4 - I, 5 + 5 I}, {4 + I, 5 + 5 I}}
+{#,Mod[Np[#],8]}&/@%761
+{#,Mod[Np[#],8]}&/@%
+
+
+{y^2 == I*x^6+3x^4+(1+I)x^3-(2I)x^2+(2-2I)x+1}/.{x->((1+I)x)}
+
+
+% /.{y->y/(((1+I)x)^3)}
+
+
+{y^2==8x^6+12x^4-(4I)x^3+4x^2-(4I)x+1}/.{x->1/(I*x),y->y/x^3}
+
+
+Simplify[{y^2==-I*x^6+3x^4+(1-I)x^3+(2I)x^2+(2+2I)x+1}/.{x->1/((1-I)x),y->y/x^3}]
+Simplify[{y^2==-I*x^6+3x^4+(1-I)x^3+(2I)x^2+(2+2I)x+1}/.{x->1/((1+I)x),y->y/x^3}]
+Simplify[{y^2==I*x^6+3x^4+(1+I)x^3-(2I)x^2+(2-2I)x+1}/.{x->1/((1-I)x),y->y/x^3}]
+Simplify[{y^2==I*x^6+3x^4+(1+I)x^3-(2I)x^2+(2-2I)x+1}/.{x->1/((1+I)x),y->y/x^3}]
+Simplify[Simplify[{y^2==(I)x^6+3x^4+(1+I)x^3-(2I)x^2+(2-2I)x+1}/.{x->1/((1-I)x), y->y/(2x)^3}]/.{x->1/x, y->y/x^3}]
+
+
+Solutionmodp[p_]:=(reps= cbox[Round[Sqrt[Np[p]]]]; Extract[reps,Position0[reps,p]][[1]])
+Position0[list_,p_]:=Position[Mod[#^3-8*#^2+20*#-8,p] & /@ list,0]
+
+
+Mmod[p_]:=Mod[#^3-8*#^2+20*#-8,p] &/@ cbox0[Sqrt[Np[p]]]
+ptable[p_]:=Table[p^i, {i, Range[6]}]
+Discriminant[x^3-8*x^2+20*x-8,x]
+
+
+primeset[n_]:=Table[Prime[i],{i,Range[n]}]
+weilbound[q_]:=N[(q-1)-2*Sqrt[q]]
+
+
+gforders[n_,m_]:=primeset[n][[n]]^Range[m]
+
+
+SolveC[f_, n_]:=Select[Tuples[{cbox0[n],cbox0[n]}], #[[2]]^2 == f[#[[1]]] & ]
+SolveCmodp[f_, p_]:=(If[PrimeQ[p] && Im[p]==0, Select[Tuples[{Range[0,p-1], Range[0,p-1]}], Mod[#[[2]]^2 - f[#[[1]]],p]==0 & ], q=Np[p]; Print[q]; Select[Tuples[{Range[0,q-1], Range[0,q-1]}], Mod[#[[2]]^2 - f[#[[1]]],q]==0 & ]])
+Solve[{x, y} \[Element] InfiniteLine[{{0, 0}, {2, 1}}] && {x, y} \[Element] Circle[], {x, y}]
+
+
+moduliset2:={{-6, 8 + 7 I}, {-5, 8 + 5 I}, {-5 + 3 I, 9 + 4 I}, {-4 + 2 I, 8 + 3 I}, {-4 + 2 I, 10 + I},{-3, 5 + 4 I}, {-3, 10 + 7 I}, {-3 - I, 7 + 2 I}, {-3 + I, 6 + I}, {-3 - 2 I, 7}, {-2, 3 + 2 I}, {-2, 4 + I}, {-2 - 2 I, 9 + 4 I}, {-2 + 2 I, 5 + 2 I}, {-2 + 2 I, 8 + 7 I}, {-2 - 3 I, 6 + 5 I}, {-2 - 3 I, 8 + 3 I}, {-2 - 3 I, 8 + 7 I}, {-1, 2 + I}, {-1, 3}, {-1, 7}, {-1 - I, 10 + 7 I}, {-1 - 2 I, 7}, {-1 - 2 I, 8 + 5 I}, {-1 + 3 I, 5 + 4 I}, {-1 + 4 I, 10 + 7 I}, {2 I, 4 + I},{3 I, 10 + I}, {4 I, 8 + 3 I}, {-6 I, 10 + 9 I}, {1, 3}, {1, 7}, {1 - 2 I, 7}, {1 - 2 I, 9 + 4 I},{1 + 2 I, 5 + 2 I}, {1 + 2 I, 8 + 5 I}, {1 - 3 I, 5 + 4 I}, {1 + 3 I, 9 + 4 I}, {1 - 4 I, 10 + 7 I}, {1 - 6 I, 8 + 7 I}, {2, 3}, {2, 7 + 2 I}, {2 - I, 4 + I}, {2 - 2 I, 5 + 2 I},{2 - 2 I, 8 + 7 I}, {2 - 3 I, 9 + 4 I}, {2 + 3 I, 8 + 3 I}, {3, 5 + 4 I}, {3, 8 + 7 I}, {3 - 2 I, 7}, {3 - 2 I, 7 + 2 I}, {3 + 2 I, 9 + 4 I}, {4 + 2 I, 10 + I}, {5 - 2 I, 8 + 3 I},{6, 7}}
+
+
+mset22:={{-8 + I, 10 + 7 I}, {-6 + 3 I, 10 + 9 I}, {-5, 10 + 9 I}, {-5 - 2 I, 8 + 7 I}, {-5 + 2 I, 8 + 5 I}, {-5 + 3 I, 10 + I}, {-4, 9 + 4 I}, {-4 + I, 10 + 3 I}, {-4 - 3 I, 9 + 4 I},{-4 + 3 I, 10 + 3 I}, {-4 + 3 I, 10 + 7 I}, {-3, 7}, {-3 - I, 7}, {-3 - I, 8 + 3 I},{-3 + I, 5 + 2 I}, {-3 + I, 7}, {-3 - 2 I, 9 + 4 I}, {-3 - 3 I, 7}, {-3 - 4 I, 10 + I}, {-3 + 4 I, 8 + 7 I}, {-2, 7 + 2 I}, {-2, 8 + 3 I}, {-2, 8 + 7 I}, {-2 + I, 5 + 4 I}, {-2 - 2 I, 10 + 9 I}, {-2 + 3 I, 6 + 5 I}, {-2 + 3 I, 9 + 4 I}, {-2 - 4 I, 8 + 5 I}, {-2 + 4 I, 10 + 3 I}, {-2 - 5 I, 10 + 9 I}, {-1, 6 + I}, {-1, 8 + 3 I}, {-1, 10 + 9 I}, {-1 + I, 6 + 5 I}, {-1 + I, 10 + 7 I}, {-1 - 2 I, 4 + I}, {-1 - 2 I, 5 + 2 I}, {-1 + 2 I, 5 + 2 I}, {-1 + 2 I, 5 + 4 I}, {-1 + 2 I, 9 + 4 I}, {-1 - 3 I, 10 + 3 I},{-1 - 4 I, 10 + 7 I}, {-2 I, 4 + I}, {-2 I, 6 + 5 I}, {-3 I, 5 + 4 I}, {-3 I, 6 + 5 I}, {3 I, 5 + 4 I}, {-4 I, 5 + 4 I}, {1, 3 + 2 I}, {1, 4 + I}, {1, 6 + I}, {1 + I, 10 + 7 I},{1 + 2 I, 10 + 9 I}, {1 - 3 I, 10 + I}, {2, 4 + I}, {2 + I, 6 + I}, {2 + I, 10 + I}, {2 + I, 10 + 9 I}, {2 - 2 I, 7 + 2 I}, {2 + 2 I, 6 + 5 I}, {2 + 2 I, 8 + 3 I}, {2 + 2 I, 8 + 7 I},{2 + 2 I, 10 + 9 I}, {2 - 3 I, 6 + 5 I}, {2 - 3 I, 7 + 2 I}, {2 - 4 I, 10 + 3 I},{2 + 4 I, 8 + 3 I}, {3, 6 + 5 I}, {3, 7}, {3 - I, 7}, {3 + I, 7}, {3 + 2 I, 7 + 2 I}, {3 - 3 I, 7}, {3 + 3 I, 8 + 3 I}, {3 + 3 I, 8 + 7 I}, {3 + 6 I, 10 + 7 I}, {3 + 6 I, 10 + 9 I},{4, 7}, {4 - I, 8 + 5 I}, {4 - 2 I, 10 + 9 I}, {4 - 3 I, 10 + 7 I}, {5 - I, 9 + 4 I},{5 - 3 I, 10 + I}, {6 - 2 I, 10 + 3 I}}
+
+
+Valsneedinghugeprime={-154+73I, -126+33I, -120-118I, -120+120I, -112-14I, -108+46I, -96-27I, -96-127I, -96+129I}
