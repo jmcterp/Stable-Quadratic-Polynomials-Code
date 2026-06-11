@@ -11,7 +11,7 @@ Polymod[poly_, z_]:= (Clear[x]; coeffs:=Mod[CoefficientList[Expand[poly], x],z];
 listf[c_,n_]=Table[fcn[c,i],{i,n}];
 listf0[c_,n_]:=Table[fcn[c,i],{i,n}]/.x->0
 
-
+sortabs[list_]:=(assoc:= Association[Table[zz->Abs[zz]^2, {zz,list}]]; Return[Keys[Sort[assoc]]]);
 Gprimes[n_]:=sortabs[Select[cbox[n], PrimeQ[#, GaussianIntegers->True] && Re[#]>= 0 && Im[#]>= 0 &]];
 gp[n_]:=Select[Gprimes[n], Re[#] > Im[#] &]
 pr=gp[100];
@@ -57,12 +57,6 @@ fn0sqrtsgpm[c_,n_, m_]:=fn0sqrts[c,#,n] & /@ gp[m]
 fn0sqrtsgp[c_,n_]:=fn0sqrts[c,#, 10] & /@ gp[n]
 fn0modz[c_,z_,n_]:= (Clear[k]; If[GCD[c,z]==1, FN0:=List[ModularInverse[c,z]]; For[k=1, k<n, k++, AppendTo[FN0, Mod[(FN0[[k]])^2+ModularInverse[c,z], z]]]; FN0, FN0:=Table[0, {Range[1,n]}]; FN0]);
 
-
-eps[c_,n_]:=Sqrt[c]*Log[N[Sqrt[an[c,n]]+an[c,n-1]]/N[Sqrt[an[c,n]]-an[c,n-1]]]
-listeps[c_,n_]:=Table[eps[c,i], {i,2,n}]
-limeps[c_]:=Sqrt[c]*Log[N[1+Sqrt[F[c]]]/N[1-Sqrt[F[c]]]]
-chkbound[n_]:=Select[cbox[n], Union[Table[Abs[(listeps[#,10]/#)[[i]]]<= 2Log[1+Sqrt[2]], {i, 1,9}]]!={True} &]
-
 anmodz[c_,n_,z_]:=(AN:=List[1]; 
 For[k=1, k<n, k++, AppendTo[AN, Mod[(AN[[k]])^2+c^(Mod[2^k-1, eul[z]]), z]]]; AN);
 
@@ -80,11 +74,6 @@ Findmoduli[mm_, nn_] :=Select[Tupqq[mm,nn], tfunique @@ #  == tfnobad @@ # &];
 
 ezmoduli[mmm_, nnn_]:=Union[Table[{Mod[x[[1]],x[[2]]],x[[2]]}, {x,Findmoduli[mmm, nnn]}]];
 Arrangedmoduli[m_,n_]:=(ezmoduliset=ezmoduli[m,n]; Moduliset=cboxqq[m,n]; arrangedreps=Table[{Table[zz[[1]], {zz,Select[ezmoduliset, #[[2]]==y &]}], y}, {y, Moduliset}]; arrangedreps)
-cdis=cdiskk[1,178];
-bars={4I,1+I,1-I,-1-I,-1+I,3-I,-3-I,2+2I,-2+2I,9+3I,-9+3I,4-13I,-4-13I};
-valuesmodgp[c_]:=Table[{Mod[c,j], j}, {j, tenpr}];
-Universe:=Complement[cdis, bars];
-
 
 modtup[tuple_]:={Mod[tuple[[1]], tuple[[2]]], tuple[[2]]}
 NormFactors[c_]:={Np[#1],#1,#2} & @@@ facint[c]
@@ -92,20 +81,7 @@ NormFactors[c_]:={Np[#1],#1,#2} & @@@ facint[c]
 
 ListNormFactors[c_]:=(listnorms=NormFactors[c]; Flatten[Union[Table[Divisors[listnorms[[i]][[1]]], {i,Length[listnorms]}]]])
 
-
-Select[cbox[10], MemberQ[Mod[ListNormFactors[#]-7,8],0] || MemberQ[Mod[ListNormFactors[#]+1,8],0] & ]
-{#,Mod[ListNormFactors[#], 8]} & /@ %410
-Find2[n_]:=Select[cbox[10], (MemberQ[Mod[ListNormFactors[#]-7,8],0] || MemberQ[Mod[ListNormFactors[#]-5,8],0]) && (v1i[#]<=1) &]
-
-
-{#, Length[sqrtmodz[I,#]]} & /@ %
-
-
 test1st[j_,z_]:=SubsetQ[Union[{1},2*Range[10],3*Range[10]],Flatten[Position[tfunique[j,z][[1]],True]]]
-
-
-checkodd[n_]:={#, v1i[#], anmodz[#,10,n]} &/@ %439
-
 
 IndexTFQ[list_,indexlist_]:=SubsetQ[indexlist, Position[list,True]]
 RemovebadT[list_]:=Select[list, IndexTFQ[#, Union[2*Range[10], 3*Range[10]]] &]
@@ -115,15 +91,11 @@ disc[poly_]:=Discriminant[poly, x]
 
 Tup[n_]:=Select[Tuples[{cbox[n],Gprimes[n]}], GCD[#[[1]],#[[2]]]==1 &]
 
-
-
 anbar[c_,n_]:=anrec[c,n]/Table[c^(2^(i-1)-1), {i,1,n}]
 F[c_]:=(1/2)*(1-Sqrt[1-4/c])
 anlim[c_]:=c*F[c];
 
-
 cfac[c_]:=Select[Tuples[{cbox1[Round[Abs[c]]],cbox1[Round[Abs[c]]]}], #[[1]]*#[[2]] ==c && GCD[#[[1]],#[[2]]]==1 &];
-mindiff[n_]:=Min[Table[Abs[absn[c+1]-absn[c]],{c, cbox0[n]}]]
 minq[n_]:=N[Min[Table[q[cc], {cc, cbox[n]}]]]
 selectkn[k_,n_]:=Select[cbox[n], Np[#]==k &]
 lineup[list_]:=Select[list, Abs[#[[2]]]>Abs[#[[1]]] &]
@@ -134,18 +106,10 @@ q[c_]:=Min[Table[Abs[xx[[2]]/xx[[1]]], {xx,lineup[cfac[c]]}]]
 q1[c_]:=( If[Im[c]==0, qfactors0=facint[I*c], qfactors0=facint[c]]; qfactors1={}; For[i=1, i<=Length[qfactors0], For[j=1, j<=qfactors0[[i]][[2]], AppendTo[qfactors1, {qfactors0[[i]][[1]]^j, c/qfactors0[[i]][[1]]^j}]]]; qfactors=lineup[gfactors1]; qfactorsrat={}; For[i=1, Length[qfactors], AppendTo[qfactorsrat, Abs[qfactors[[i]][[2]]/qfactors[[i]][[1]]]]]; If[Length[qfactorsrat]==0, kill(i); kill(j); Abs[c], kill(i); kill(j); Min[N[qfactorsrat]]]);
 
 
-absn[list_]:=Abs[N[list]]
-
-
 gcdansq[c_,n_]:=(s=Sqrt[an[c,n]]; If[gIntegerQ[s], Return[GCD[s+an[c,n-1], s-an[c,n-1]]]])
-
-
-Select[Tuples[{cbox0[5],cbox[5]}], gIntegerQ[(#[[1]]-1)/#[[2]]] && gIntegerQ[#[[1]]/(#[[2]]+1)]&]
-
 
 TFsq[c_]:=gIntegerQ /@ (Sqrt /@ anrec[c,5])
 Findsquares[n_]:=Select[{#, TFsq[#], Position[TFsq[#], True]} & /@ cbox[n], Length[#[[3]]] >1 &]
-
 
 Findgcds[n_]:={#[[1]], #[[2]], gcdansq[#[[1]],2]} & /@ ({#[[1]],#[[2]]} & /@ Findsquares[n])
 
@@ -169,8 +133,6 @@ denomsk[c_, k_] :=
 	Table[dna[c]^(2^i), {i, 0, k - 1}]}, {c, v1i[c],
 	Denominator /@ listf0[c, k],
 	Join[{dna[c]}, Table[(dna[c]^2/2)^(2^i), {i, 0, k - 2}]]}];
-denomswk[m_,k_]:={m, v1i[m], Denominator /@ listg0[1,m, k],
-	Table[dnw[m]^(2^i), {i, 0, k - 1}]}
 
 
 dratio[n_,k_]:={#1, #2, listratio[#2]} & @@@ denomsnk[n,k]
@@ -183,12 +145,7 @@ ssw[i_,n_]:=Select[denomsw[i,n], #[[2]]==Abs[#[[1]]]^2 &]
 tst[list_]:={Abs[#1], v1i[#1], #1, #2} & @@@ list
 tstw[list_]:=Select[{Abs[#1], v1i[#1], #1, #2, Abs[#1]^4/2^v1i[#1]} & @@@ list, #[[4]]!=#[[5]] & ]
 an[c_,n_]:= Last[anrec[c,n]];
-ratio[c_,n_]:=absn[an[Abs[c],n-1]/Sqrt[an[c,n]]]
-tabrat[c_,n_]:=Table[ratio[c,ii], {ii,Range[2,n]}];
-wn[i_,m_,n_]:= Last[wnrec[i,m,n]];
 
-
-sortabs[list_]:=(assoc:= Association[Table[zz->Abs[zz]^2, {zz,list}]]; Return[Keys[Sort[assoc]]]);
 cbox[n_]:=(Clear[ii,jj]; sortabs[Complement[Flatten[Table[ii+jj*I, {ii,Range[-Abs[n],Abs[n]]},{jj,Range[-Abs[n],Abs[n]]}]],{0,1,-1,I, -I}]])
 cbox1[n_]:=(Clear[ii,jj]; sortabs[no0[Flatten[Table[ii+jj*I, {ii,Range[-n,n]},{jj,Range[-n,n]}]]]])
 cbox0[n_]:=Join[{0},cbox1[n]]
@@ -224,28 +181,11 @@ gIntegerQ[x_] := IntegerQ[Re[x]] && IntegerQ[Im[x]]
 gRationalQ[x_]:= If[gIntegerQ[x]!=True, gIntegerQ[Numerator[x]], True]
 floatIntegerQ[x_]:=If[Round[x]==x, True, False]
 
-
 cboxp[n_]:=Select[Tup[n], GCD[#,1+I]==1 && issq[#]==False && issq[#+1] == False &]
-
-checkan[c_,n_] := (AN=anrec[c,n]; 
-If[EvenQ[v1i[c]], 
-Table[AN[[i]]/(Abs[c]^(2^i)), {i, n}], 
-Z=Table[(2^(2^(i-2)))*AN[[i]]/(Abs[c]^(2^i)), {i, n}]; Z[[1]]*=Sqrt[2]/2; Z
-]);
-Select[cbox[10], checkan[#,6]!=listf0[#,6] &]
-checkwn[i_,m_,n_] := (WN=wnrec[i,m,n]; Table[WN[[j]]/(Abs[m^2]^(2^j)), {j, n}]);
-
-
-checkvalsan[n_, k_]:= Select[cbox[n], numf0[#,k+1]!=anrec[#,k] &]
-
-checkvalsanmod[c_,n_,z_]:= Select[cbox[n], anmodz1[c,n,z] != anmodz[c,n,z]]
-anmodz1[c_,n_,z_]:= Mod[# ,z] & /@ anrec[c,n]
-
 
 
 issqfaclistf[m_, n_]:= {#, issq /@ listf0[#,n], nfctlistf[#, n]} & /@ cbox[m]
 issqfaclistg[i_, m_, n_]:= {#, issq /@ listg0[i,#,n], nfctlistg[i, #, n]} & /@ cbox[m]
-
 
 sortres[z_]:=(dr=Ceiling[Abs[z]^2/2]; sortabs[cbox[dr]]);
 
@@ -264,13 +204,7 @@ eul[zzz_]:=(t=Norm[zzz]^2; S=FactorInteger[zzz,GaussianIntegers->True]; For[i=1,
 
 Np[zzzz_]:=Norm[zzzz]^2
 
-
-primes3mod4[n_]:=Select[gp[n], Mod[Norm[#]+1,4]==0 || Mod[Np[#]+1,4]==0 &]
-Whi[n_]:=Select[cbox[n], clsr[{I},#]=={True} &]
-
-
 issqan[c_,n_, z_]:=(Print[{c,z}]; isnonsqmodz0[anmodz1[c,n,z],z]);
-issqwn[j_,m_,n_ ,z_]:=( Print[{m,z}]; isnonsqmodz0[wnmodz[j,m,n,z],z]);
 
 
 resclass[z1_, z_] := (Return[DR[[Position[Table[Mod[z1 - DR[[i]], z], {i, Length[DR]}], 
@@ -284,13 +218,6 @@ SQr[z_]:=Union[Mod[squares0[floorz[z]], z]]
 TFsqrs[element_]:=(If[Length[element] != 0, Return[True], Return[False]])
 clsr[listi_, zzzz_]:= (squres=SQr[zzzz]; MemberQ[squres, #] & /@ listi)
 clsr1[listi_, zzzz_]:= (squres=modpsqrts[listi, zzzz]; Table[TFsqrs[squres[[i]]], {i, Length[squres]}])
-
-
-inp[]:= (L:=Association[]; modz:=1; While[modz!=0, modz=Input["please input modulus"];ji:=1; While[ji!=0, ji=Input["input m for that modulus"]; If[modz!=0 && ji!=0, AppendTo[L,ji->modz]];]]; Return[L]); 
-
-
-modznprimes[z_,n_]:=Table[Mod[z,i], {i,Gprimes[n]}];
-Modzmpwr[z_, m_, pwr_]:=Table[Mod[z,m^i], {i, Range[pwr]}];
 
 
 sqmodpwrs[m_, pwr_]:=Table[squares[Ceiling[(Abs[m^i]^2)/2]], {i, Range[pwr]}]
@@ -328,25 +255,15 @@ nfac[poly_]:=If[Exponent[First[gfac[poly]],x] ==0 , Length[gfac[poly]]-1, Length
 
 gfacf[c_,n_]:=gfac[fcn[c,n]];
 
-
-gfacg[i_, m_,n_]:=gfac[g[i,m,n]];
-
-
 nfctf[c_,n_]:= If[Exponent[First[gfacf[c,n]],x] ==0 , Length[gfacf[c,n] ]-1, Length[gfacf[c,n]]];
 
-
-nfctg[i_, m_, n_]:=If[Exponent[First[gfacg[i,m,n]],x]==0 , Length[gfacg[i,m,n]]-1, Length[gfacg[i,m,n]]];
-
-
 nfctlistf[c_,n_] := nfctf[c,#] &/@ Range[n]
-nfctlistg[l_,m_,n_] := nfctg[l, m, #] &/@ Range[n]
 
 factabf[n_]:=Table[{z, nfctlistf[z,5], issq /@ anrec[z, 5]},{z,cbox[n]}];
 
 searchf[n_, m1_, m2_, m3_]:=Select[factabf[n], #[[2]][[1]]==m1 & && #[[2]][[2]]==m2 & && #[[2]][[3]]==m3 &]; 
 
 valuesf[n_, m_, k_]:=(fvals=searchf[n,m,k]; Table[fvals[[z]][[1]], {z, Length[fvals]}]) 
-
 
 
 issq[zz_]:=(If[gRationalQ[zz], 
@@ -361,10 +278,6 @@ searchbnm[n_,m_]:=Select[checkbnm[n,m], Union[#[[3]]]!={False} &]
 
 
 nfaclist[list_]:=(list1=Complement[list, {0}]; Table[{i,nfctf[i,#] &/@ Range[5]},{x,list1}])
-
-
-nfaclistg[l_, list_]:=(list2=Complement[list, {0}]; Table[{x,nfctg[l, x, #] &/@ Range[5]},{x,list2}])
-
 
 searchlist[list_, m_,k_]:=Select[list, #[[2]][[m]]==k &];
 valueslist[list_]:=Table[z[[1]], {z, list}];
@@ -387,11 +300,6 @@ sgsq0[n_]:=Union[Table[-(s^2-1)^2, {s, sgoodset[n]}]];
 
 mgoodset[n_]:=Complement[cbox[n],mbadset]
 
-
-fourmp0[n_]:=Union[Table[4m^2(m^2+1), {m, mgoodset[n]}]];
-fourmp[n_]:=Complement[fourmp0[n], {0}];
-fourmm0[n_]:=Union[Table[4m^2(m^2-1),{m,mgoodset[n]}]];
-fourmm[n_]:=Complement[fourmm0[n], {0}];
 ftestp[n_]:=Union[Table[m^2(2*I-m^2),{m,mgoodset[n]}]];
 ftestm[n_]:=Union[Table[-m^2(m^2+2*I),{m,mgoodset[n]}]];
 ftest[n_]:=Union[ftestp[n],ftestm[n]];
@@ -465,28 +373,6 @@ list2[list_]:=Union[Table[x[[2]], {x, list}]];
 testlistmodz[list_,z_]:={#, l22[#,z]} & /@ list
 
 
-sq2n[n_]:=Mod[cbox0[2^(n+1)]^2,2^(n+1)]
-sq2nc[n_]:=Intersection[Select[sq2n[n], Mod[#,2^n]==-1&], Select[sq2n[n], Mod[#^2,2^(n+1)]==1 &]]
-sqset[k_]:=Union[Table[z2^k-1, {z, cbox[2^k]}]] 
-sqrtset[k_]:=Flatten[Table[x-y*2^{k-1}I, {x,{-1,1}},{y,Union[Mod[cbox0[2],2]]}]]
-Int[set1_, set2_] := Intersection[set1, set2]
-Com[set1_,set2_]:=Complement[set1,set2]
-pls[n_]:=Int[sq2n[n],sqrtset[n]]
-checkers[r_]Table[{Mod[Abs[p]^2,8], clsr[{r},p]},{p,gp[10]}]
-sqrres[zz_]:=Union[Mod[cbox0[Abs[zz]^2]^2,zz]]
-clist[c_]:=Table[(c^(2^(n-1)-1))/(1+c), {n,1,5}]
-clist1[c_]:=Table[(c^(2^(n-1))+1)/(c+1), {n,1,5}]
-
-
-modre[z_]:=Union[Mod[Re[equivclass[1,z,10]],z]]
-modim[z_]:=Union[Mod[Im[equivclass[1,z,10]],z]]
-Select[gp[20], Mod[Re[#],Abs[#]^2]==-Mod[Im[#],Abs[#]^2] &]
-
-
-plsi[n_]:=Int[sq2n[n],I*sqrtset[n]]
-mod1[n_]:=Select[sq2n[n],  Mod[#,2^n]==-1&]
-
-
 SolveEllipticCurve[i_, n_]:= (If[i==0, Return[Intersection[Table[I*x^3+x^2+1, {x, cbox0[n]}], squares0[n]]]];
 If[i==1, Return[Intersection[Table[x^3-x+1, {x, cbox0[n]}], squares0[n]]]];
 If[i==2, Return[Intersection[Table[x^3+x^2+2x+1, {x, cbox0[n]}], squares0[n]]]]);
@@ -540,17 +426,7 @@ no0[list_]:=Complement[list,{0}]
 Findcycle[list_]:=(Clear[i,j,k]; pairs={}; 
 For[i=1, i<= Length[list], i++, For[j=1, j<= Length[list], j++, If[i<j && list[[i]]==list[[j]], AppendTo[pairs, {i,j}]]]]; For[k=1, k<=Length[pairs], k++, k1= pairs[[k]][[1]]; k2=pairs[[k]][[2]]; If[2*k2-k1<=Length[list], If[list[[k1;;k2]]==list[[k2;;2*k2-k1]], Return[list[[k1;;k2]] ]]]]);
 
-
-{#[[1]], #[[2]], 2*#[[2]]-#[[1]]}& /@ pairs
-list2[list_]:=Union[Table[x[[2]], {x, list}]];
-
-
-Table[Mod[I(1+I)*x*y+I, 2+2I], {x,{1,-1,I,-I}},{y,Mod[cbox[3],2+2I]}]
-Union[modtup /@ Select[Tuples[{cbox0[20],gp[20]}], EvenQ[Im[#[[2]]]] && Union[Mod[anrec[#[[1]],10][[Range[3,9,2]]]-(1+I),#[[2]]]]=={0} &]]
-
-
 floorz[z_]:=Floor[Abs[z]]
 sqrtmodz[ccc_,zzz_]:= (Sqrtset:=Mod[cdisk0[floorz[zzz]], zzz]; Sqrset:=Mod[Sqrtset^2,zzz]; cccmod:= Mod[ccc,zzz]; If[MemberQ[Sqrset,cccmod]==True, Union[Extract[Sqrtset, Position[Mod[Sqrtset^2, zzz], cccmod]]]])
-
 
 SolveC[f_, n_]:=Select[Tuples[{cbox0[n],cbox0[n]}], #[[2]]^2 == f[#[[1]]] & ]
