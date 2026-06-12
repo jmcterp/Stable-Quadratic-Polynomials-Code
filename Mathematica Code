@@ -109,21 +109,15 @@ Findsquares[n_]:=Select[{#, TFsq[#], Position[TFsq[#], True]} & /@ cbox[n], Leng
 
 Findgcds[n_]:={#[[1]], #[[2]], gcdansq[#[[1]],2]} & /@ ({#[[1]],#[[2]]} & /@ Findsquares[n])
 
-
 cs[c_]:=c/GCD[Re[c],Im[c]]
 dna[c_] := Abs[c]^2/GCD[Re[c],Im[c]]
 dnw[m_] :=  (Abs[m]^2/GCD[Re[m],Im[m]])^2 /2^(1-Boole[EvenQ[v1i[m]]])
 dnak[c_,k_]:=  If[EvenQ[v1i[c]], dna[c]^(2^(k-1)), (dna[c]^2/2)^(2^(k-1))]
 dnwk[m_,k_]:= dnw[m]^(2^(k-1))
 dnakmodz[m_,k_,z_]:=Mod[dnw[m]^(Mod[2^(k-1),eul[z]])/m,z]
-
-
-
 recreatef1[c_,n_]:= (If[EvenQ[v1i[c]], Print[even]; DN:=Table[dna[c]^(2^(i-1)), {i,n+1}], Print[neither]; DN:=Join[{dna[c]},Table[dna[c]^(2^(i-2)), {i, 2, n+1}]]]; AN:=anrec[c,n]; AN/DN)
 denoms[n_]:={#, (Denominator /@ listf0[#, 1])[[1]]} & /@ cbox[n]
 listratio[list_]:=Table[list[[i+1]]/list[[i]]^2, {i, Length[list]-1}];
-
-
 denomsk[c_, k_] :=
   If[EvenQ[v1i[c]], {c, v1i[c], Denominator /@ listf0[c, k],
 	Table[dna[c]^(2^i), {i, 0, k - 1}]}, {c, v1i[c],
@@ -145,9 +139,7 @@ cboxq[n_]:=Select[cbox[n], Re[#]>0 && Im[#]>=0 &];
 cboxodd[n_]:=Select[cbox[n], issq[#]==False && issq[#+1]==False &]
 cboxiq2[n_]:=I*cbox[n]^2
 
-
 cboxfacts[n_]:={#,v1i[#], nfctlistf[#,5], v1i[#]} & /@ Select[cbox[n],GCD[#,1+I]!=1 &]
-
 
 searchcbox:=Select[cboxp[n], Union[nfctlistf[#,5]]!={1}&]
 searchodd[n_]:=Select[{#,nfctlistf[#,4], issq /@ anrec[#,4]}& /@ cboxodd[n], Union[#[[2]]]!= {1} || Union[#[[3]][[2;;4]]]!={False} &]
@@ -205,34 +197,9 @@ TFsqrs[element_]:=(If[Length[element] != 0, Return[True], Return[False]])
 clsr[listi_, zzzz_]:= (squres=SQr[zzzz]; MemberQ[squres, #] & /@ listi)
 clsr1[listi_, zzzz_]:= (squres=modpsqrts[listi, zzzz]; Table[TFsqrs[squres[[i]]], {i, Length[squres]}])
 
-
-sqmodpwrs[m_, pwr_]:=Table[squares[Ceiling[(Abs[m^i]^2)/2]], {i, Range[pwr]}]
-
-
-testsquaremod[z_, m_, pwr_]:=(sqlist=sqmodpwrs[m,pwr]; kk=Modzmpwr[z,m,pwr]; Table[MemberQ[sqlist[[i]], kk[[i]]], {i, Range[pwr]}]);
-
-
-Tablemodsq[list_, n_, pwr_]:=Flatten[Table[{x,y, testsquaremod[x,y,pwr]}, {x, list}, {y, Gprimes[n]}],1];
-
-
-FindFT[list_, n_, pwr_]:=(table=Tablemodsq[list,n,pwr]; table1=Select[table, Length[Intersection[ ((#-1) &) /@ Position[#[[3]],False], Position[#[[3]],True]]]>0 &]; table1); 
-
-
 FFT[list_]:=Select[list, Length[Intersection[ ((#-1) &) /@ Position[#[[3]],False], Position[#[[3]],True]]]>0 &];
 minusone[list_]:= (#-1) & /@ list
 listFT[list_]:= Select[list, Length[ Intersection[ ((#-1) &) /@ Position[#,False], Position[#,True]] ]>0 &];
-
-
-Bool[vec_]:=(truthvalsBool=List[]; For[i=1, i<Length[vec], i++, k=MemberQ[ LM[[i]],vec[[i]] ]; AppendTo[truthvalsBool,k]]; truthvalsBool);
-
-
-Findvals[vec_]:=(If[Union[Bool[vec]]=={False}, k=True, k=False]; Return[k])
-
-
-Findvalsmod[z_]:= (Findvals[modzprimes[z]]);
-
-
-Findzs[n_]:=Select[cbox[n], Findvalsmod[#] &];
 
 
 gfac[poly_]:=Factor[poly, GaussianIntegers->True];
@@ -341,13 +308,11 @@ list2[list_]:=Union[Table[x[[2]], {x, list}]];
 
 testlistmodz[list_,z_]:={#, l22[#,z]} & /@ list
 
-
 p[zz_]:=(Clear[zz]; If[PrimeQ[z, GaussianIntegers->True], True, FactorInteger[zz, GaussianIntegers->True]];)
 
 anz[n_, z_]:=(reps=Complement[Union[Mod[cc[n], z]], {0}]; Clear[nn]; M=Table[{nn, z, clsr[anmodz[nn,20,z],z]},{nn, reps}]; Select[M, SubsetQ[3*Range[10],Flatten[Position[#[[3]], True]]] &]);
 
 anzfff[n_, z_]:=(reps=Complement[Union[Mod[cc[n], z]], {0}]; Clear[nn]; M=Table[{nn, z, clsr[anmodz[nn,20,z],z]},{nn, reps}]; Select[M, SubsetQ[3*Range[10],Flatten[Position[#[[3]], True]]] &]);
-
 
 cc[n_]:=nobad[Select[cbox0[n], issq[#+1]==False &]]
 nobad[list_]:=Complement[list, bad]
